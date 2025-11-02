@@ -1,4 +1,4 @@
-package org.example;
+package Grupo_Diurno_A;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
