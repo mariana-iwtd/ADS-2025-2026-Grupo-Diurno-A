@@ -2,6 +2,10 @@ package Grupo_Diurno_A;
 
 import org.eclipse.jdt.core.dom.*;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 /**
  * A classe {@code MetricCalculator} é responsável por calcular as métricas das
  * diferentes classes e métodos, a partir das árvores de sintaxe abstrata (AST)
@@ -14,6 +18,34 @@ import org.eclipse.jdt.core.dom.*;
  * <p>Compatível com as estruturas AST produzidas pela API JDT do Eclipse.</p>
  */
 public class MetricCalculator {
+
+    /**
+     * <p>O método {@code calculateNOM} calcula o número total de métodos
+     * presentes nas diferentes classes analisadas, com base nas árvores
+     * de sintaxe abstrata (AST) previamente geradas.</p>
+     *
+     * @param asts  lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
+     * @return      número total de métodos nos ficheiros .java a analisar
+     */
+    public static int calculateNOM(List<CompilationUnit> asts){
+        //a variavel necessita de ser um array pois e' a unica forma de podermos alterar o valor dentro da funcao visit
+        int[] NOM = {0};
+
+        //percorremos todos os ast
+        for(CompilationUnit ast: asts){
+            //este metodo percorre recursivamente a arvore
+            ast.accept(new ASTVisitor() {
+                //sempre que encontrar um no' do tipo MethodDeclaration (um metodo) esta funcao sera chamada
+                @Override
+                public boolean visit(MethodDeclaration no){
+                    NOM[0]++;
+                    return super.visit(no);
+                }
+            });
+        }
+
+        return NOM[0];
+    }
 
     //TODO JAVADOC
 
@@ -191,6 +223,23 @@ public class MetricCalculator {
 
 
         return MCC_classe[0];
+    }
+
+    public static void main(String[] args){
+        //Caminho para o diretorio com codigo fonte a analisar
+        //Ema
+        //Path projectPath = Paths.get("C:/Users/emasi/OneDrive/Ambiente de Trabalho/licenciatura/2ano/workspace/Sokoban_EmaReis110847_MarianaCapela104715");
+        //Mariana
+        Path projectPath = Paths.get("C:/Users/maria/Documents/Universidade/2Ano/1º Semestre/Programação Orientada por Objetos/Workspace/Exercicio_S2");
+        //Nadia
+        //Path projectPath =
+
+        // Criar instncia do FileScanner
+        FileScanner scanner = new FileScanner(projectPath);
+
+        //Numero total de metodos
+        int NOM = MetricCalculator.calculateNOM(scanner.getCompilationUnits());
+        System.out.println("Numero de metodos (NOM): " + NOM);
     }
 
 }
