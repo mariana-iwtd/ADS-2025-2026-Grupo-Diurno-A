@@ -21,8 +21,8 @@ public class MetricCalculator {
 
     /**
      * <p>O método {@code calculateNOM} calcula o número total de métodos
-     * presentes nas diferentes classes analisadas, com base nas árvores
-     * de sintaxe abstrata (AST) previamente geradas.</p>
+     * presentes nas diferentes classes analisadas (NOM — <i>Number of
+     * Methods</i>), com base nas árvores de sintaxe abstrata (AST) previamente geradas.</p>
      *
      * @param asts  lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
      * @return      número total de métodos nos ficheiros .java a analisar
@@ -45,6 +45,35 @@ public class MetricCalculator {
         }
 
         return NOM[0];
+    }
+
+    /**
+     * <p>O método {@code calculateNOA} calcula o número total de atributos
+     * (NOA — <i>Number of Attributes</i>) presentes nas diferentes classes
+     * analisadas, com base nas árvores de sintaxe abstrata (AST) previamente geradas.</p>
+     *
+     * @param asts  lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
+     * @return      número total de atributos nos ficheiros .java a analisar
+     */
+    public static int calculateNOA(List<CompilationUnit> asts){
+        int[] NOA = {0};
+
+        //percorremos todos os ast
+        for(CompilationUnit ast: asts){
+            //este metodo percorre recursivamente a arvore
+            ast.accept(new ASTVisitor() {
+                @Override
+                //a funcao e' chamada sempre que encontrar uma declaracao de atributo
+                public boolean visit(FieldDeclaration no){
+                    //adiciona o numero de atributos na mesma linha ao NOA total
+                    //exemplo: int x, y --> 2 atributos na mesma linha
+                    NOA[0] += no.fragments().size();
+                    return super.visit(no);
+                }
+            });
+        }
+
+        return NOA[0];
     }
 
     //TODO JAVADOC
@@ -236,10 +265,15 @@ public class MetricCalculator {
 
         // Criar instncia do FileScanner
         FileScanner scanner = new FileScanner(projectPath);
+        List<CompilationUnit> asts = scanner.getCompilationUnits();
 
         //Numero total de metodos
-        int NOM = MetricCalculator.calculateNOM(scanner.getCompilationUnits());
+        int NOM = MetricCalculator.calculateNOM(asts);
         System.out.println("Numero de metodos (NOM): " + NOM);
+
+        //Numero total de atributos
+        int NOA = MetricCalculator.calculateNOA(asts);
+        System.out.println("Numero de atributos (NOA): " + NOA);
     }
 
 }
