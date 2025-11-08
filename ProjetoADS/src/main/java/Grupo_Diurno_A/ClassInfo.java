@@ -17,12 +17,15 @@ public class ClassInfo {
     private int dit; //depth of inheritance tree
     private int noc; //numero de classes filhas - number of children
     private double avgLocMethod; //media de linhas de codigo por metodo
+    private int CBO; //coupling between objects
+    private int CiclomaticComplexity; //complexidade ciclomatica total da classe
+    private double NPRM; //numero medio de parametros por metodo
 
     //construtor
     public ClassInfo(String name, int startLine, int endLine) {
         this.name = name;
-        this.methods = new ArrayList<>();
-        this.atributes = new ArrayList<>();
+        this.methods = new ArrayList<MethodInfo>();
+        this.atributes = new ArrayList<AtributeInfo>();
         this.startLine = startLine;
         this.endLine = endLine;
         this.loc = endLine - startLine + 1;
@@ -59,6 +62,9 @@ public class ClassInfo {
     public int getNoc() {
         return noc;
     }
+    public int getCBO() {return CBO;}
+    public int getCiclomaticComplexity() {return CiclomaticComplexity;}
+    public double getNPRM() {return NPRM;}
     public double getAvgLocMethod() {
         return avgLocMethod;
     }
@@ -70,15 +76,26 @@ public class ClassInfo {
     public void setNoc(int noc) {
         this.noc = noc;
     }
+    public void setCBO(int CBO) {this.CBO = CBO;}
+
+    public void setCiclomaticComplexity(int CiclomaticComplexity) {this.CiclomaticComplexity = CiclomaticComplexity;}
+    public void setNPRM(double NPRM) {this.NPRM = NPRM;}
+
     public void setAvgLocMethod(double avgLocMethod) {
-        //todo completar este metodo para calcular a media de linhas de codigo por metodo
+        this.avgLocMethod = avgLocMethod;
     }
+
+
+    public void setMethods(List<MethodInfo> methods) {this.methods=methods;}
+    public void setAtributes(List<AtributeInfo> atributes) {this.atributes=atributes;}
 
     //Adicionar metodos e atributos
     public void addMethod(MethodInfo method) {
-        this.methods.add(method);
+        methods.add(method);
     }
     public void addAtribute(AtributeInfo atribute) {
-        this.atributes.add(atribute);
+        atributes.add(atribute);
     }
+
+
 }

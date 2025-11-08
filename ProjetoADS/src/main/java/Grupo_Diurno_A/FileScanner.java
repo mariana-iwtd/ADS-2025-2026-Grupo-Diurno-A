@@ -145,7 +145,7 @@ public class FileScanner {
 
 
             // Configurar ambiente do projeto (onde procurar outras classes e bibliotecas)
-            String[] sources = { projectPath }; // diretório com os ficheiros .java (ex: "src/main/java")
+            String[] sources = { projectPath + "/src"}; // diretório com os ficheiros .java (ex: "src/main/java")
             String javaHome = System.getProperty("java.home"); // pasta do java instalado no sistema
             String[] classpath = { javaHome + "/jmods"  }; //para Java 9 e superior
 
