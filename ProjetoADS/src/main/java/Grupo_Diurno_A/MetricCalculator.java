@@ -4,7 +4,9 @@ import org.eclipse.jdt.core.dom.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A classe {@code MetricCalculator} é responsável por calcular as métricas das
@@ -18,6 +20,8 @@ import java.util.List;
  * <p>Compatível com as estruturas AST produzidas pela API JDT do Eclipse.</p>
  */
 public class MetricCalculator {
+
+    //--------------- NOM: Number of Methods --------------------------
 
     /**
      * <p>O método {@code calculateNOM} calcula o número total de métodos
@@ -47,6 +51,8 @@ public class MetricCalculator {
         return NOM[0];
     }
 
+    //--------------- NOA: Number of Attributes --------------------------
+
     /**
      * <p>O método {@code calculateNOA} calcula o número total de atributos
      * (NOA — <i>Number of Attributes</i>) presentes nas diferentes classes
@@ -75,6 +81,8 @@ public class MetricCalculator {
 
         return NOA[0];
     }
+
+    //--------------- DIT: Depth of Inheritance Tree --------------------------
 
     //TODO JAVADOC
 
@@ -117,6 +125,8 @@ public class MetricCalculator {
         }
         return DIT;
     }
+
+    //--------------- MCC: McCabe (Complexidade Ciclomatica) --------------------------
 
     //TODO JavaDoc
     
@@ -254,26 +264,126 @@ public class MetricCalculator {
         return MCC_classe[0];
     }
 
+
+    //todo: apagar todos os comentarios desnecessarios antes de entregar!!
+    //--------------- NOC: Number of Children --------------------------
+
+    /**
+     * <p>Verifica se o nó recebido representa uma classe filha de uma classe
+     * com o nome dado.</p>
+     *
+     * @param parentName    nome da classe que se pretende verificar se é classe mãe
+     * @param no            nó {@link TypeDeclaration} correspondente à classe a analisar
+     * @return              {@code true} se o nó representar uma subclasse de {@code parentName}, caso contrário {@code false}
+     */
+    private static boolean isSon(String parentName, TypeDeclaration no){
+        //Versao para conseguir ver os nomes dos filhos todo tirar tudo quando
+//        if (no.getSuperclassType() != null)
+//            if(!no.isInterface() && no.getSuperclassType().toString().equals(parentName)) {
+//                System.out.println("Filho encontrado! - " + no.getName());
+//                return true;}
+//            else return false;
+//        else return false;
+        if (no.getSuperclassType() != null)
+            return !no.isInterface() && no.getSuperclassType().toString().equals(parentName);
+        else return false;
+    }
+
+    /**
+     * <p>Conta quantas classes filhas existem para uma classe com o nome especificado.</p>
+     *
+     * @param parentName    nome da classe cuja quantidade de subclasses se pretende determinar
+     * @param asts          lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
+     * @return              número total de classes filhas da classe {@code parentName}
+     */
+    private static int countSons(String parentName, List<CompilationUnit> asts){
+        int[] nFilhos = {0};
+
+        //percorremos todos os ast
+        for(CompilationUnit ast: asts){
+            //percorre recursivamente a arvore
+            ast.accept(new ASTVisitor() {
+                @Override
+                //a funcao e' chamada sempre que encontrar uma classe/interface
+                public boolean visit(TypeDeclaration no) {
+                    //se for filho da classe a analisar, incrementa o nFilhos
+                    if (isSon(parentName, no))
+                        nFilhos[0]++;
+
+                    return super.visit(no);
+                }
+            });
+        }
+
+        return nFilhos[0];
+    }
+
+    /**
+     * <p>Calcula a métrica NOC (<i>Number of Children</i>) para cada classe
+     * presente nas árvores de sintaxe abstrata (AST) fornecidas.</p>
+     *
+     * @param asts  lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
+     * @return      mapa que associa o nome de cada classe ao seu número de subclasses diretas
+     */
+    public static Map<String, Integer> calculateNOC(List<CompilationUnit> asts){
+        Map<String, Integer> NOC = new HashMap<>();
+
+        //percorremos todos os ast
+        for(CompilationUnit ast: asts){
+            //este metodo percorre recursivamente a arvore
+            ast.accept(new ASTVisitor() {
+                @Override
+                //a funcao e' chamada sempre que encontrar uma classe/interface
+                public boolean visit(TypeDeclaration no){
+                    //se nao for uma interface
+                    if(!no.isInterface()){
+                        //System.out.println("Classe encontrada: " + no.getName()); //todo tirar
+                        //para cada classe precisamos de contar quantas é que tem pais com o seu nome
+                        int nFilhos = countSons(no.getName().toString(), asts);
+
+                        //adiciona a classe e o seu numero de filhos ao mapa
+                        NOC.put(no.getName().toString(), nFilhos);
+                    }
+
+                    return super.visit(no);
+                }
+            });
+        }
+
+        return NOC;
+    }
+
+    //todo tirar o main quando ja nao for preciso
     public static void main(String[] args){
         //Caminho para o diretorio com codigo fonte a analisar
         //Ema
         //Path projectPath = Paths.get("C:/Users/emasi/OneDrive/Ambiente de Trabalho/licenciatura/2ano/workspace/Sokoban_EmaReis110847_MarianaCapela104715");
-        //Mariana
-        Path projectPath = Paths.get("C:/Users/maria/Documents/Universidade/2Ano/1º Semestre/Programação Orientada por Objetos/Workspace/Exercicio_S2");
+        //Mariana - 1º Grande 2º Mais Pequeno
+        Path projectPath = Paths.get("C:/Users/maria/Documents/Universidade/2Ano/1º Semestre/Programação Orientada por Objetos/Projeto/Sokoban_EmaReis110847_MarianaCapela104715");
+        //Path projectPath = Paths.get("C:/Users/maria/Documents/Universidade/2Ano/1º Semestre/Programação Orientada por Objetos/Workspace/Exercicio_S2");
         //Nadia
         //Path projectPath =
 
-        // Criar instncia do FileScanner
+        // Criar instancia do FileScanner
         FileScanner scanner = new FileScanner(projectPath);
         List<CompilationUnit> asts = scanner.getCompilationUnits();
 
+        System.out.println("Metricas Calculadas");
+
         //Numero total de metodos
         int NOM = MetricCalculator.calculateNOM(asts);
-        System.out.println("Numero de metodos (NOM): " + NOM);
+        System.out.println("--> Numero de metodos (NOM): " + NOM);
 
         //Numero total de atributos
         int NOA = MetricCalculator.calculateNOA(asts);
-        System.out.println("Numero de atributos (NOA): " + NOA);
+        System.out.println("--> Numero de atributos (NOA): " + NOA);
+
+        Map<String, Integer> NOC = MetricCalculator.calculateNOC(asts);
+        System.out.println("--> Numero de filhos de cada classe (NOC): ");
+        //Para cada classe, fazemos um print com o seu numero de filhos
+        for(String classe : NOC.keySet()){
+            System.out.println("\t- Classe " + classe + ": " + NOC.get(classe) + " filhos");
+        }
     }
 
 }
