@@ -52,7 +52,7 @@ public class MetricCalculator {
                     classInfo.setNoc(calculateNOC(asts, no));//preenche o NOC da classe
                     //classInfo.setCBO(); //todo completar
                     classInfo.setCiclomaticComplexity(calculateMCC(classInfo)); //preenche a complexidade ciclomatica total da classe
-                    classInfo.setNPRM(calculateNPRM());//todo completar
+                    classInfo.setNPRM(calculateNPRM(classInfo));//todo completar
 
 
                     //--------------------CALCULAR MEDIA LOC POR METODO-----------------------
@@ -215,16 +215,6 @@ public class MetricCalculator {
         return CC[0];
     }
 
-
-    //todo calcular NPRM julgo que e' bastante simples so ir buscar ao Class info a lista dos metodos e somar o num de todos os parametros e dividir pelo numero de metodos
-    //todo criei a funcao para n dar erro mas n preenchi nada
-    private double calculateNPRM(){
-        return 0;
-    }
-
-
-
-
     //todo julgo que estas funcoes nom e noa n sao precisas
     //--------------- NOM: Number of Methods --------------------------
 
@@ -260,12 +250,25 @@ public class MetricCalculator {
      * Esta métrica representa o número médio de parâmetros por método declarado
      * numa determinada classe.
      *
-     * @param ast A CompilationUnit correspondente ao ficheiro fonte analisado.
+     * @param classInfo Informção da classe a analisar ({@link ClassInfo})
      * @return O valor NPRM da classe.
      *         Caso a classe não tenha métodos, retorna 0 para evitar divisão por zero.
      */
-    public static int calculateNPRM(CompilationUnit ast){
-        final int[] metodos = new int[1];
+    private double calculateNPRM(ClassInfo classInfo){
+        List<MethodInfo> metodos = classInfo.getMethods();
+
+        int n_parametros = 0;
+        int n_metodos = metodos.size();
+
+        for(MethodInfo m : metodos){
+            n_parametros += m.getNumeroDeParametros();
+        }
+
+        if(n_metodos == 0) return 0;
+
+        return (double) n_parametros /n_metodos;
+
+        /*final int[] metodos = new int[1];
         final int[] parametros = new int[1];
 
         // Vamos percurrer a ast
@@ -288,7 +291,7 @@ public class MetricCalculator {
         if(metodos[0] == 0) return 0;
 
         // retorna o calculo da media de parametros que cada metodo desta classe recebe (NPRM)
-        return (int) parametros[0]/metodos[0];
+        return (int) parametros[0]/metodos[0];*/
     }
 
     //--------------- NOA: Number of Attributes --------------------------
