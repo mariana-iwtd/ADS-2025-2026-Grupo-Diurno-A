@@ -76,9 +76,13 @@ public class MetricCalculator {
 
     //--------------- DIT: Depth of Inheritance Tree --------------------------
 
-    //TODO JAVADOC
-
-    // Função para calcular o valor de DIT
+    /**
+     * Calcula o número de níveis de herança entre a classe analisada e
+     * a classe raiz da hierarquia (normalmente {@code java.lang.Object}).
+     *
+     * @param ast A AST (CompilationUnit) correspondente ao código fonte da classe a analisar.
+     * @return DIT da classe analisada.
+     */
     public int calculateDIT(CompilationUnit ast){
 
         //Variavel que vai guardar as informacoes completas da classe (nome, herencas, ...)
@@ -120,9 +124,12 @@ public class MetricCalculator {
 
     //--------------- MCC: McCabe (Complexidade Ciclomatica) --------------------------
 
-    //TODO JavaDoc
-    
-    // funcao que calcula a complexidade de uma classe
+    /**
+     * Calcula a métrica de complexidade ciclomática (MCC) de uma classe.
+     *
+     * @param ast A AST (CompilationUnit) correspondente ao código fonte da classe a analisar.
+     * @return A complexidade ciclomática total da classe.
+     */
     public int calculateMCC(CompilationUnit ast){
 
         // variavel que guarda a complexidade da classe
