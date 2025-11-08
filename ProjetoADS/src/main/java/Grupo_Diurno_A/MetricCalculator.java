@@ -47,6 +47,45 @@ public class MetricCalculator {
         return NOM[0];
     }
 
+    //--------------- NPRM: Number of Parameters per Method --------------------------
+
+    /**
+     * Calcula a métrica NPRM (Number of Parameters per Method) para uma classe.
+     *
+     * Esta métrica representa o número médio de parâmetros por método declarado
+     * numa determinada classe.
+     *
+     * @param ast A CompilationUnit correspondente ao ficheiro fonte analisado.
+     * @return O valor NPRM da classe.
+     *         Caso a classe não tenha métodos, retorna 0 para evitar divisão por zero.
+     */
+    public static int calculateNPRM(CompilationUnit ast){
+        final int[] metodos = new int[1];
+        final int[] parametros = new int[1];
+
+        // Vamos percurrer a ast
+        ast.accept(new ASTVisitor() {
+
+            // Vamos verificar quantos parametros cada metodo recebe
+            @Override
+            public boolean visit(MethodDeclaration node){
+                metodos[0]++;
+                parametros[0] += node.parameters().size();
+
+                //teste
+                System.out.println("parametros do metodo " + node.getName() + ": " + node.parameters());
+
+                return true;
+            }
+        });
+
+        // Caso a classe nao tenha metodos
+        if(metodos[0] == 0) return 0;
+
+        // retorna o calculo da media de parametros que cada metodo desta classe recebe (NPRM)
+        return (int) parametros[0]/metodos[0];
+    }
+
     //--------------- NOA: Number of Attributes --------------------------
 
     /**
@@ -83,7 +122,7 @@ public class MetricCalculator {
      * @param ast A AST (CompilationUnit) correspondente ao código fonte da classe a analisar.
      * @return DIT da classe analisada.
      */
-    public int calculateDIT(CompilationUnit ast){
+    public static int calculateDIT(CompilationUnit ast){
 
         //Variavel que vai guardar as informacoes completas da classe (nome, herencas, ...)
         // Foi feita desta maneira para poder chama-la dentro da funcao visit
@@ -130,7 +169,7 @@ public class MetricCalculator {
      * @param ast A AST (CompilationUnit) correspondente ao código fonte da classe a analisar.
      * @return A complexidade ciclomática total da classe.
      */
-    public int calculateMCC(CompilationUnit ast){
+    public static int calculateMCC(CompilationUnit ast){
 
         // variavel que guarda a complexidade da classe
         final int[] MCC_classe = new int[1];
