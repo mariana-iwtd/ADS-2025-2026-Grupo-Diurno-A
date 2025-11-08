@@ -24,29 +24,25 @@ public class MetricCalculator {
     //--------------- NOM: Number of Methods --------------------------
 
     /**
-     * <p>O método {@code calculateNOM} calcula o número total de métodos
-     * presentes nas diferentes classes analisadas (NOM — <i>Number of
-     * Methods</i>), com base nas árvores de sintaxe abstrata (AST) previamente geradas.</p>
+     * <p>O método {@code calculateNOM} calcula o número de métodos da
+     * AST fornecida (NOM — <i>Number of Methods</i>). </p>
      *
-     * @param asts  lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
-     * @return      número total de métodos nos ficheiros .java a analisar
+     * @param ast   árvore de sintaxe abstrata ({@link CompilationUnit}) correspondente ao ficheiro a analisar
+     * @return      número total de métodos na AST fornecida
      */
-    public static int calculateNOM(List<CompilationUnit> asts){
+    public static int calculateNOM(CompilationUnit ast){
         //a variavel necessita de ser um array pois e' a unica forma de podermos alterar o valor dentro da funcao visit
         int[] NOM = {0};
 
         //percorremos todos os ast
-        for(CompilationUnit ast: asts){
-            //este metodo percorre recursivamente a arvore
-            ast.accept(new ASTVisitor() {
-                //sempre que encontrar um no' do tipo MethodDeclaration (um metodo) esta funcao sera chamada
-                @Override
-                public boolean visit(MethodDeclaration no){
-                    NOM[0]++;
-                    return super.visit(no);
-                }
-            });
-        }
+        ast.accept(new ASTVisitor() {
+            //sempre que encontrar um no' do tipo MethodDeclaration (um metodo) esta funcao sera chamada
+            @Override
+            public boolean visit(MethodDeclaration no){
+                NOM[0]++;
+                return super.visit(no);
+            }
+        });
 
         return NOM[0];
     }
@@ -55,29 +51,25 @@ public class MetricCalculator {
 
     /**
      * <p>O método {@code calculateNOA} calcula o número total de atributos
-     * (NOA — <i>Number of Attributes</i>) presentes nas diferentes classes
-     * analisadas, com base nas árvores de sintaxe abstrata (AST) previamente geradas.</p>
+     * (NOA — <i>Number of Attributes</i>) de um AST fornecido. </p>
      *
-     * @param asts  lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
-     * @return      número total de atributos nos ficheiros .java a analisar
+     * @param ast   árvore de sintaxe abstrata ({@link CompilationUnit}) correspondente ao ficheiro a analisar
+     * @return      número total de atributos declarados na AST fornecida
      */
-    public static int calculateNOA(List<CompilationUnit> asts){
+    public static int calculateNOA(CompilationUnit ast){
         int[] NOA = {0};
 
         //percorremos todos os ast
-        for(CompilationUnit ast: asts){
-            //este metodo percorre recursivamente a arvore
-            ast.accept(new ASTVisitor() {
-                @Override
-                //a funcao e' chamada sempre que encontrar uma declaracao de atributo
-                public boolean visit(FieldDeclaration no){
-                    //adiciona o numero de atributos na mesma linha ao NOA total
-                    //exemplo: int x, y --> 2 atributos na mesma linha
-                    NOA[0] += no.fragments().size();
-                    return super.visit(no);
-                }
-            });
-        }
+        ast.accept(new ASTVisitor() {
+            @Override
+            //a funcao e' chamada sempre que encontrar uma declaracao de atributo
+            public boolean visit(FieldDeclaration no){
+                //adiciona o numero de atributos na mesma linha ao NOA total da classe
+                //exemplo: int x, y --> 2 atributos na mesma linha
+                NOA[0] += no.fragments().size();
+                return super.visit(no);
+            }
+        });
 
         return NOA[0];
     }
@@ -290,32 +282,20 @@ public class MetricCalculator {
     }
 
     /**
-     * <p>Conta quantas classes filhas existem para uma classe com o nome especificado.</p>
+     * <p>Obtém o nome da classe principal representada pela árvore de sintaxe
+     * abstrata (AST) recebida.</p>
      *
-     * @param parentName    nome da classe cuja quantidade de subclasses se pretende determinar
-     * @param asts          lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
-     * @return              número total de classes filhas da classe {@code parentName}
+     * @param ast   árvore de sintaxe abstrata ({@link CompilationUnit}) correspondente ao ficheiro a analisar
+     * @return      nome da classe principal do ficheiro, ou {@code null} caso não exista
      */
-    private static int countSons(String parentName, List<CompilationUnit> asts){
-        int[] nFilhos = {0};
-
-        //percorremos todos os ast
-        for(CompilationUnit ast: asts){
-            //percorre recursivamente a arvore
-            ast.accept(new ASTVisitor() {
-                @Override
-                //a funcao e' chamada sempre que encontrar uma classe/interface
-                public boolean visit(TypeDeclaration no) {
-                    //se for filho da classe a analisar, incrementa o nFilhos
-                    if (isSon(parentName, no))
-                        nFilhos[0]++;
-
-                    return super.visit(no);
-                }
-            });
+    public static String getMainClassName(CompilationUnit ast) {
+        List types = ast.types(); // lista de todos os tipos (classes, interfaces, enums...) do ast
+        //o primeiro em principio e' a classe publica que queremos tirar o nome
+        if (!types.isEmpty() && types.get(0) instanceof TypeDeclaration) {
+            TypeDeclaration type = (TypeDeclaration) types.get(0);
+            return type.getName().toString();
         }
-
-        return nFilhos[0];
+        return null;
     }
 
     /**
@@ -325,32 +305,27 @@ public class MetricCalculator {
      * @param asts  lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
      * @return      mapa que associa o nome de cada classe ao seu número de subclasses diretas
      */
-    public static Map<String, Integer> calculateNOC(List<CompilationUnit> asts){
-        Map<String, Integer> NOC = new HashMap<>();
+    public static int calculateNOC(List<CompilationUnit> asts, CompilationUnit ast){
+        int[] NOC = {0};
+        String nomeClasse = getMainClassName(ast);
 
         //percorremos todos os ast
-        for(CompilationUnit ast: asts){
-            //este metodo percorre recursivamente a arvore
-            ast.accept(new ASTVisitor() {
+        for(CompilationUnit astAnalisar: asts){
+            //percorre recursivamente a arvore
+            astAnalisar.accept(new ASTVisitor() {
                 @Override
                 //a funcao e' chamada sempre que encontrar uma classe/interface
-                public boolean visit(TypeDeclaration no){
-                    //se nao for uma interface
-                    if(!no.isInterface()){
-                        //System.out.println("Classe encontrada: " + no.getName()); //todo tirar
-                        //para cada classe precisamos de contar quantas é que tem pais com o seu nome
-                        int nFilhos = countSons(no.getName().toString(), asts);
-
-                        //adiciona a classe e o seu numero de filhos ao mapa
-                        NOC.put(no.getName().toString(), nFilhos);
-                    }
+                public boolean visit(TypeDeclaration no) {
+                    //se for filho da classe a analisar, incrementa o NOC
+                    if (isSon(nomeClasse, no))
+                        NOC[0]++;
 
                     return super.visit(no);
                 }
             });
         }
 
-        return NOC;
+        return NOC[0];
     }
 
     //todo tirar o main quando ja nao for preciso
@@ -368,22 +343,26 @@ public class MetricCalculator {
         FileScanner scanner = new FileScanner(projectPath);
         List<CompilationUnit> asts = scanner.getCompilationUnits();
 
-        System.out.println("Metricas Calculadas");
+        System.out.println("Metricas Calculadas para Cada AST");
 
-        //Numero total de metodos
-        int NOM = MetricCalculator.calculateNOM(asts);
-        System.out.println("--> Numero de metodos (NOM): " + NOM);
+        for(CompilationUnit ast: asts){
+            System.out.println("\nAST - " + getMainClassName(ast));
 
-        //Numero total de atributos
-        int NOA = MetricCalculator.calculateNOA(asts);
-        System.out.println("--> Numero de atributos (NOA): " + NOA);
+            //Numero de metodos
+            int NOM = MetricCalculator.calculateNOM(ast);
+            System.out.println("--> Numero de metodos (NOM): " + NOM);
 
-        Map<String, Integer> NOC = MetricCalculator.calculateNOC(asts);
-        System.out.println("--> Numero de filhos de cada classe (NOC): ");
-        //Para cada classe, fazemos um print com o seu numero de filhos
-        for(String classe : NOC.keySet()){
-            System.out.println("\t- Classe " + classe + ": " + NOC.get(classe) + " filhos");
+            //Numero de atributos
+            int NOA = MetricCalculator.calculateNOA(ast);
+            System.out.println("--> Numero de atributos (NOA): " + NOA);
+
+            //Numero de filhos
+            int NOC = MetricCalculator.calculateNOC(asts, ast);
+            System.out.println("--> Numero de filhos (NOC): " + NOC);
+
         }
+
+
     }
 
 }
