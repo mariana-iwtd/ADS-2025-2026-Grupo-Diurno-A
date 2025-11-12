@@ -23,16 +23,34 @@ import java.util.ArrayList;
  */
 public class MetricCalculator {
 
-    List<ClassInfo> classes;
+    /** Lista de informações de classes analisadas. */
+    private List<ClassInfo> classes;
+
+    /**
+     * Construtor principal. Recebe a lista de ASTs e inicia o processo
+     * @param asts lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
+     */
     public MetricCalculator(List<CompilationUnit> asts){
         classes = extractClassInfo(asts);
     }
 
-    //getters
+    //getter
+
+    /**
+     * Retorna a lista de informações de classes analisadas.
+     * @return Lista de informações de classes ({@link ClassInfo}) calculadas
+     */
     public List<ClassInfo> getClasses() {
         return classes;
     }
 
+
+    /**
+     * Extrai informações de classes a partir das árvores de sintaxe abstrata (AST)
+     * Calcula as métricas para cada classe encontrada. e Junta todas as informacoes numa lista de ClassInfo
+     * @param asts lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
+     * @return Lista de informações de classes ({@link ClassInfo}) extraídas das ASTs fornecidas
+     */
     private List<ClassInfo> extractClassInfo(List<CompilationUnit> asts){
         final List <ClassInfo> classInfos = new ArrayList<>();
         for (final CompilationUnit ast : asts){
@@ -50,9 +68,9 @@ public class MetricCalculator {
 
                     classInfo.setDit(calculateDIT(no));//preenche o DIT da classe
                     classInfo.setNoc(calculateNOC(asts, no));//preenche o NOC da classe
-                    //classInfo.setCBO(); //todo completar
+                    classInfo.setCBO(calculateCBO(no));
                     classInfo.setCiclomaticComplexity(calculateMCC(classInfo)); //preenche a complexidade ciclomatica total da classe
-                    classInfo.setNPRM(calculateNPRM(classInfo));//todo completar
+                    classInfo.setNPRM(calculateNPRM(classInfo));
 
 
                     //--------------------CALCULAR MEDIA LOC POR METODO-----------------------
@@ -70,6 +88,13 @@ public class MetricCalculator {
         return classInfos;
     }
 
+    /**
+     * Preeenche a lista de métodos de uma classe. Com base no TypeDeclaration.
+     * Preenche tambem a complexidade ciclomatica de cada metodo, as linhas de codigo e o numero de parametros.
+     * @param type nó {@link TypeDeclaration} correspondente à classe a analisar
+     * @param ast nó {@link CompilationUnit} correspondente à AST do ficheiro a analisar
+     * @return
+     */
     private List<MethodInfo> getMethods(TypeDeclaration type, CompilationUnit ast){
         List<MethodInfo> methods = new ArrayList<>();
 
@@ -91,6 +116,11 @@ public class MetricCalculator {
         return methods;
     }
 
+    /**
+     * Preeenche a lista de atributos de uma classe. Com base no TypeDeclaration.
+     * @param type nó {@link TypeDeclaration} correspondente à classe a analisar
+     * @return Lista de atributos ({@link AtributeInfo}) da classe analisada
+     */
     private List<AtributeInfo> getAtributes(TypeDeclaration type){
         List<AtributeInfo> atributes = new ArrayList<>();
 
@@ -114,8 +144,11 @@ public class MetricCalculator {
         return atributes;
     }
 
-    //todo copiei do codigo da nadia, para calcular para cada metodo
-    //calcula complexidade ciclomatica por metodo
+    /**
+     * Calcula a complexidade ciclomática (CC) de um método específico.
+     * @param method nó {@link MethodDeclaration} correspondente ao método a analisar
+     * @return Complexidade ciclomática do método analisado
+     */
     private int calculateCC_method(MethodDeclaration method){
         final int[] CC = {1}; //complexidade ciclomática inicia em 1
 
@@ -215,38 +248,11 @@ public class MetricCalculator {
         return CC[0];
     }
 
-    //todo julgo que estas funcoes nom e noa n sao precisas
-    //--------------- NOM: Number of Methods --------------------------
 
-    /**
-     * <p>O método {@code calculateNOM} calcula o número de métodos da
-     * AST fornecida (NOM — <i>Number of Methods</i>). </p>
-     *
-     * @param ast   árvore de sintaxe abstrata ({@link CompilationUnit}) correspondente ao ficheiro a analisar
-     * @return      número total de métodos na AST fornecida
-     */
-    public static int calculateNOM(TypeDeclaration type){
-        //a variavel necessita de ser um array pois e' a unica forma de podermos alterar o valor dentro da funcao visit
-        int[] NOM = {0};
-
-        //percorremos todos os ast
-        type.accept(new ASTVisitor() {
-            //sempre que encontrar um no' do tipo MethodDeclaration (um metodo) esta funcao sera chamada
-            @Override
-            public boolean visit(MethodDeclaration no){
-                NOM[0]++;
-                return super.visit(no);
-            }
-        });
-
-        return NOM[0];
-    }
 
     //--------------- NPRM: Number of Parameters per Method --------------------------
-
     /**
      * Calcula a métrica NPRM (Number of Parameters per Method) para uma classe.
-     *
      * Esta métrica representa o número médio de parâmetros por método declarado
      * numa determinada classe.
      *
@@ -267,59 +273,8 @@ public class MetricCalculator {
         if(n_metodos == 0) return 0;
 
         return (double) n_parametros /n_metodos;
-
-        /*final int[] metodos = new int[1];
-        final int[] parametros = new int[1];
-
-        // Vamos percurrer a ast
-        ast.accept(new ASTVisitor() {
-
-            // Vamos verificar quantos parametros cada metodo recebe
-            @Override
-            public boolean visit(MethodDeclaration node){
-                metodos[0]++;
-                parametros[0] += node.parameters().size();
-
-                //teste
-                System.out.println("parametros do metodo " + node.getName() + ": " + node.parameters());
-
-                return true;
-            }
-        });
-
-        // Caso a classe nao tenha metodos
-        if(metodos[0] == 0) return 0;
-
-        // retorna o calculo da media de parametros que cada metodo desta classe recebe (NPRM)
-        return (int) parametros[0]/metodos[0];*/
     }
 
-    //--------------- NOA: Number of Attributes --------------------------
-
-    /**
-     * <p>O método {@code calculateNOA} calcula o número total de atributos
-     * (NOA — <i>Number of Attributes</i>) de um AST fornecido. </p>
-     *
-     * @param ast   árvore de sintaxe abstrata ({@link CompilationUnit}) correspondente ao ficheiro a analisar
-     * @return      número total de atributos declarados na AST fornecida
-     */
-    public static int calculateNOA(CompilationUnit ast){
-        int[] NOA = {0};
-
-        //percorremos todos os ast
-        ast.accept(new ASTVisitor() {
-            @Override
-            //a funcao e' chamada sempre que encontrar uma declaracao de atributo
-            public boolean visit(FieldDeclaration no){
-                //adiciona o numero de atributos na mesma linha ao NOA total da classe
-                //exemplo: int x, y --> 2 atributos na mesma linha
-                NOA[0] += no.fragments().size();
-                return super.visit(no);
-            }
-        });
-
-        return NOA[0];
-    }
 
     //--------------- DIT: Depth of Inheritance Tree --------------------------
 
@@ -327,7 +282,7 @@ public class MetricCalculator {
      * Calcula o número de níveis de herança entre a classe analisada e
      * a classe raiz da hierarquia (normalmente {@code java.lang.Object}).
      *
-     * @param ast A AST (CompilationUnit) correspondente ao código fonte da classe a analisar.
+     * @param type nó {@link TypeDeclaration} correspondente à classe a analisar
      * @return DIT da classe analisada.
      */
     public int calculateDIT(TypeDeclaration type){
@@ -383,142 +338,9 @@ public class MetricCalculator {
     /**
      * Calcula a métrica de complexidade ciclomática (MCC) de uma classe.
      *
-     * @param ast A AST (CompilationUnit) correspondente ao código fonte da classe a analisar.
+     * @param classInfo Informação da classe a analisar ({@link ClassInfo}).
      * @return A complexidade ciclomática total da classe.
      */
-
-    /*public int calculateMCC(CompilationUnit ast){
-        // variavel que guarda a complexidade da classe
-        final int[] MCC_classe = new int[1];
-
-        // Vamos percorrer a AST para encontrar e analisar os metodos da classe
-        ast.accept(new ASTVisitor() {
-
-            // guarda a complexidade do metodo que esta a ser analisado
-            int MCC = 0;
-
-            // visita os metodos, 1 a 1, permitindo as suas analises
-            @Override
-            public boolean visit(MethodDeclaration node) {
-                // Teste
-                System.out.println("Metodo a avaliar: " + node.getName());
-                System.out.println("+1");
-
-                MCC++;
-                return true;
-            }
-
-            // Verificamos se o metodo tem statements que aumentem a sua complexidade
-
-            // Verifica se tem ifs -> if (x > 0)
-            @Override
-            public boolean visit(IfStatement node){
-                // Teste
-                System.out.println("Tem If - +1");
-
-                MCC++;
-                return true;
-            }
-
-            // Verifica se tem fors -> for(...)
-            @Override
-            public boolean visit(ForStatement node){
-                // Teste
-                System.out.println("Tem for - +1");
-
-                MCC++;
-                return true;
-            }
-
-            // Verifica se tem forEachs -> for(Type x : list)
-            @Override
-            public boolean visit(EnhancedForStatement node){
-                // Teste
-                System.out.println("Tem forEach - +1");
-
-                MCC++;
-                return true;
-            }
-
-            // Verifica se tem whiles -> while(...)
-            @Override
-            public boolean visit(WhileStatement node){
-                // Teste
-                System.out.println("Tem while - +1");
-
-                MCC++;
-                return true;
-            }
-
-            // Verifica se tem dos -> do {...} while(...)
-            @Override
-            public boolean visit(DoStatement node){
-                // Teste
-                System.out.println("Tem do - +1");
-
-                MCC++;
-                return true;
-            }
-
-            // Verifica se existem switchs
-            // se houver, retorna true para permitir avaliar o nº de cases
-            @Override
-            public boolean visit(SwitchStatement node){
-                // Teste
-                System.out.println("Tem switch então vamos verificar o nº de cases");
-
-                return true;
-            }
-
-            // Verifica se existem cases -> case:
-            @Override
-            public boolean visit(SwitchCase node){
-                // Teste
-                System.out.println("Tem case - +1");
-
-                MCC++;
-                return true;
-            }
-
-            // Verifica se tem caths -> catch(Exception e)
-            @Override
-            public boolean visit(CatchClause node){
-                // Teste
-                System.out.println("Tem catch - +1");
-
-                MCC++;
-                return true;
-            }
-
-            // Verifica se tem condicoes -> condition ? x : y
-            @Override
-            public boolean visit(ConditionalExpression node){
-                // Teste
-                System.out.println("Tem condicional - +1");
-
-                MCC++;
-                return true;
-            }
-
-
-            // quando acaba a visita de um metodo, passa automaticamente para o proximo ate nao haver mais
-            // apenas e' adicionado pq queremos fazer algo no fim da visita
-            @Override
-            public void endVisit(MethodDeclaration node){
-                // Teste
-                System.out.println("Metodo " + node.getName() + " tem complexidade " + MCC);
-
-                // adicionamos ao valor total da complexidade da classe
-                MCC_classe[0] += MCC;
-                // reiniciamos a variavel MCC
-                MCC = 0;
-            }
-        });
-
-
-        return MCC_classe[0];
-    }*/
-    //versao simplificada da funcao acima que ja usa a funcao calculateCC_method
     public int calculateMCC(ClassInfo classInfo){
         List <MethodInfo> metodos = classInfo.getMethods();
         int complexidadeCiclomaticaTotal = 0;
@@ -555,29 +377,11 @@ public class MetricCalculator {
     }
 
     /**
-     * <p>Obtém o nome da classe principal representada pela árvore de sintaxe
-     * abstrata (AST) recebida.</p>
-     *
-     * @param ast   árvore de sintaxe abstrata ({@link CompilationUnit}) correspondente ao ficheiro a analisar
-     * @return      nome da classe principal do ficheiro, ou {@code null} caso não exista
-     */
-    //todo nao apaguei mas ja nao e usada
-    public static String getMainClassName(CompilationUnit ast) {
-        List types = ast.types(); // lista de todos os tipos (classes, interfaces, enums...) do ast
-        //o primeiro em principio e' a classe publica que queremos tirar o nome
-        if (!types.isEmpty() && types.get(0) instanceof TypeDeclaration) {
-            TypeDeclaration type = (TypeDeclaration) types.get(0);
-            return type.getName().toString();
-        }
-        return null;
-    }
-
-    /**
      * <p>Calcula a métrica NOC (<i>Number of Children</i>) para cada classe
      * presente nas árvores de sintaxe abstrata (AST) fornecidas.</p>
      *
      * @param asts  lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
-     * @return      mapa que associa o nome de cada classe ao seu número de subclasses diretas
+     * @return      o valor NOC da classe analisada
      */
     public static int calculateNOC(List<CompilationUnit> asts, TypeDeclaration type){
         int[] NOC = {0};
@@ -603,16 +407,83 @@ public class MetricCalculator {
     }
 
     //--------------- CBO: Coupling Between Objects --------------------------
+    /**
+     * <p>Calcula a métrica CBO (<i>Coupling Between Objects</i>) para uma classe
+     *
+     * Conta o número de classes distintas com as quais a classe analisada, através de herança,
+     * interfaces implementadas, tipos de campos, tipos de retorno de métodos,
+     * @param type nó {@link TypeDeclaration} correspondente à classe a analisar
+     * @return o valor CBO da classe analisada
+     */
+    public int calculateCBO(TypeDeclaration type){
+        List<String> types = new ArrayList<>();
+        // Herança
+        if (type.getSuperclassType() != null)
+            types = addType(type.getSuperclassType(), types);
 
+        //interfaces
+        for (Object o : type.superInterfaceTypes()) {
+            types = addType((Type)o, types);
+        }
 
-    /*public static int CBO(CompilationUnit ast){
-        ast.accept(new ASTVisitor() {
-            @Override
-            public boolean visit(TypeDeclaration typeDeclaration){
-                return super.visit(no);
+        // Campos (tipo + inicializadores)
+        for (FieldDeclaration fd : type.getFields()) {
+            types = addType(fd.getType(), types);
+        }
+
+        //para os metodos ver retorno parametros e excecoes
+        for (MethodDeclaration m : type.getMethods()) {
+            //retorno
+            types = addType(m.getReturnType2(), types);
+            //parametros
+            List<SingleVariableDeclaration> vars = m.parameters();
+            for (SingleVariableDeclaration s : vars) {
+                types = addType(s.getType(), types);
             }
-        });
-    }_*/
+            for (Object excecoes : m.thrownExceptionTypes()) {
+                types = addType((Type) excecoes, types);
+            }
+        }
+
+        // nao contar a propria classe
+        types.remove(type.getName().getIdentifier());
+        System.out.println("Tipos da classe: " + types);
+        return types.size();
+
+    }
+
+    /**
+     * Adiciona o nome do tipo à lista de tipos distintos,
+     * se não for um tipo primitivo, e se ainda não estiver na lista.
+     * @param type tipo a adicionar
+     * @param types lista de tipos distintos
+     * @return lista atualizada de tipos distintos
+     */
+    private static List<String> addType(Type type, List<String> types) {
+        if (type == null) return types;
+
+
+        // para extrair o tipo do array
+        if (type.isArrayType()) return addType(((ArrayType) type).getElementType(), types);
+
+        // saber o tipo dos genericos List<E>->List
+        if (type.isParameterizedType()) type = ((ParameterizedType) type).getType();
+
+        //nome do tipo
+        String typeName = type.toString();
+
+        //tipos que nao contam - tipos primitivos e String e void
+        if (typeName.equals("int") || typeName.equals("double") || typeName.equals("float") ||
+            typeName.equals("long") || typeName.equals("char") || typeName.equals("boolean") ||
+            typeName.equals("byte") || typeName.equals("short") || typeName.equals("void") ||
+            typeName.equals("String"))
+            return types;
+
+        if (!types.contains(typeName)) {
+            types.add(typeName);
+        }
+        return types;
+    }
 
     //todo tirar o main quando ja nao for preciso
     public static void main(String[] args){
@@ -659,7 +530,7 @@ public class MetricCalculator {
         System.out.println(c.get(8).getNoc()); //tem de dar 9 -no meu deu 10 pk tinha uma classe a mais no projeto e estive uns 20 minutos a tentar perceber o erro
         System.out.println(c.get(1).getDit());
 
-        //teste da nadia para o DIT
+        //---------------------- Teste da nadia para o DIT -----------------------------------
         /*String source = "class A {} \n" +
             "class B extends A {} \n" +
             "class C extends B {} \n";
@@ -683,6 +554,44 @@ public class MetricCalculator {
         l.add(ast);
         MetricCalculator dit = new MetricCalculator(l);
         System.out.println(dit.getClasses().get(0).getDit());*/
+
+        // ------------------------ TESTE CBO -------------------------
+        /*
+        String source =
+                "package p;\n" +
+                        "\n" +
+                        "import java.util.List;\n" +
+                        "import java.io.IOException;\n" +
+                        "\n" +
+                        "class A implements Runnable {\n" +
+                        "    List<String> nomes;   // conta List<String>\n" +
+                        "    B b;                  // conta B\n" +
+                        "\n" +
+                        "    D[] m(C c) throws IOException { // conta D[] (não normaliza), C e IOException\n" +
+                        "        return null;\n" +
+                        "    }\n" +
+                        "\n" +
+                        "    public void run() {}\n" +
+                        "}\n" +
+                        "\n" +
+                        "class B {}\n" +
+                        "class C {}\n" +
+                        "class D {}\n";
+
+        // Construir a AST do codigo de teste
+        ASTParser parser = ASTParser.newParser(AST.JLS17);
+        parser.setKind(ASTParser.K_COMPILATION_UNIT);
+        parser.setSource(source.toCharArray());
+        parser.setUnitName("Teste.java");
+        CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+
+        // Instanciar o MetricCalculator
+        List<CompilationUnit> astAnalisar = new ArrayList<>();
+        astAnalisar.add(cu);
+        MetricCalculator mc = new MetricCalculator(astAnalisar);
+        System.out.println(mc.getClasses().get(0).getCBO());
+
+    */
 
 
 
