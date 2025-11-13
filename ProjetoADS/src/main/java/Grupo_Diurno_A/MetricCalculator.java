@@ -98,7 +98,21 @@ public class MetricCalculator {
     private List<MethodInfo> getMethods(TypeDeclaration type, CompilationUnit ast){
         List<MethodInfo> methods = new ArrayList<>();
 
-        type.accept(new ASTVisitor() {
+        MethodDeclaration[] methodDeclarations = type.getMethods();
+
+        for(MethodDeclaration m : methodDeclarations){
+            String name = m.getName().toString();
+            int startLine = ast.getLineNumber(m.getStartPosition());
+            int endLine = ast.getLineNumber(m.getStartPosition() + m.getLength())-1;
+            int numeroDeParametros = m.parameters().size();
+            MethodInfo methodInfo = new MethodInfo(name, startLine, endLine, numeroDeParametros);
+            methodInfo.setCyclomaticComplexity(calculateCC_method(m)); //preenche a complexidade ciclomatica do metodo
+
+            methods.add(methodInfo);
+        }
+
+        // Se fizermos assim, vai buscar as metodos de classes internas tambem, o que nao e' suposto
+        /*type.accept(new ASTVisitor() {
             @Override
             public boolean visit(MethodDeclaration no){
                 String name = no.getName().toString();
@@ -112,7 +126,7 @@ public class MetricCalculator {
 
                 return true;
             }
-        });
+        });*/
         return methods;
     }
 
@@ -124,6 +138,23 @@ public class MetricCalculator {
     private List<AtributeInfo> getAtributes(TypeDeclaration type){
         List<AtributeInfo> atributes = new ArrayList<>();
 
+        FieldDeclaration[] fieldDeclarations = type.getFields();
+
+        for (FieldDeclaration f : fieldDeclarations){
+            String type_data = f.getType().toString();
+            //pode haver mais do que um atributo declarado na mesma linha - no.fragments() devolve uma lista com todos os atributos declarados na linha
+            //elementos da lista sao do tipo VariableDeclarationFragment
+            //exemplo: int x, y; sao dois fragments
+            List<VariableDeclarationFragment> fragments = f.fragments();
+            for(VariableDeclarationFragment fragment : fragments){
+                String name = fragment.getName().toString();
+                AtributeInfo atributeInfo = new AtributeInfo(name, type_data);
+                atributes.add(atributeInfo);
+            }
+        }
+
+        // Se fizermos assim, conta tambem os atributos de classes internas, o que nao e' suposto
+        /*
         type.accept(new ASTVisitor() {
             //vai ver declaracoes de atributos
             @Override
@@ -140,7 +171,8 @@ public class MetricCalculator {
                 }
                 return true;
             }
-        });
+        });*/
+
         return atributes;
     }
 
@@ -151,6 +183,7 @@ public class MetricCalculator {
      */
     private int calculateCC_method(MethodDeclaration method){
         final int[] CC = {1}; //complexidade ciclomática inicia em 1
+        //System.out.println("A analisar metodo " + method.getName());
 
         method.accept(new ASTVisitor() {
 
@@ -159,7 +192,7 @@ public class MetricCalculator {
             @Override
             public boolean visit(IfStatement node) {
                 // Teste
-                System.out.println("Tem If - +1");
+                //System.out.println("Tem If - +1");
 
                 CC[0]++;
                 return true;
@@ -169,7 +202,7 @@ public class MetricCalculator {
             @Override
             public boolean visit(ForStatement node) {
                 // Teste
-                System.out.println("Tem for - +1");
+                //System.out.println("Tem for - +1");
 
                 CC[0]++;
                 return true;
@@ -179,7 +212,7 @@ public class MetricCalculator {
             @Override
             public boolean visit(EnhancedForStatement node) {
                 // Teste
-                System.out.println("Tem forEach - +1");
+                //System.out.println("Tem forEach - +1");
 
                 CC[0]++;
                 return true;
@@ -189,7 +222,7 @@ public class MetricCalculator {
             @Override
             public boolean visit(WhileStatement node) {
                 // Teste
-                System.out.println("Tem while - +1");
+                //System.out.println("Tem while - +1");
 
                 CC[0]++;
                 return true;
@@ -199,7 +232,7 @@ public class MetricCalculator {
             @Override
             public boolean visit(DoStatement node) {
                 // Teste
-                System.out.println("Tem do - +1");
+                //System.out.println("Tem do - +1");
 
                 CC[0]++;
                 return true;
@@ -210,7 +243,7 @@ public class MetricCalculator {
             @Override
             public boolean visit(SwitchStatement node) {
                 // Teste
-                System.out.println("Tem switch então vamos verificar o nº de cases");
+                //System.out.println("Tem switch então vamos verificar o nº de cases");
 
                 return true;
             }
@@ -219,7 +252,7 @@ public class MetricCalculator {
             @Override
             public boolean visit(SwitchCase node) {
                 // Teste
-                System.out.println("Tem case - +1");
+                //System.out.println("Tem case - +1");
 
                 CC[0]++;
                 return true;
@@ -229,7 +262,7 @@ public class MetricCalculator {
             @Override
             public boolean visit(CatchClause node) {
                 // Teste
-                System.out.println("Tem catch - +1");
+                //System.out.println("Tem catch - +1");
 
                 CC[0]++;
                 return true;
@@ -239,12 +272,14 @@ public class MetricCalculator {
             @Override
             public boolean visit(ConditionalExpression node) {
                 // Teste
-                System.out.println("Tem condicional - +1");
+                //System.out.println("Tem condicional - +1");
 
                 CC[0]++;
                 return true;
             }
         });
+
+        //System.out.println("O metodo " + method.getName() + " tem MCC = " + CC[0]);
         return CC[0];
     }
 
@@ -342,11 +377,13 @@ public class MetricCalculator {
      * @return A complexidade ciclomática total da classe.
      */
     public int calculateMCC(ClassInfo classInfo){
+        //System.out.println(" A analisar MCC da class " + classInfo.getName());
         List <MethodInfo> metodos = classInfo.getMethods();
         int complexidadeCiclomaticaTotal = 0;
         for(MethodInfo metodo : metodos){
             complexidadeCiclomaticaTotal += metodo.getCyclomaticComplexity();
         }
+        //System.out.println("A classe " + classInfo.getName() + " tem MCC = " + complexidadeCiclomaticaTotal);
         return complexidadeCiclomaticaTotal;
     }
 

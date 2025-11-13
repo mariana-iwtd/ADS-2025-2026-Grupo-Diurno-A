@@ -55,10 +55,13 @@ public class FileScannerTest {
         // Criar diretorio temporario
         path = Files.createTempDirectory("projectTest");
 
+        // Criar subdiretório "src" que o FileScanner espera
+        Path srcPath = Files.createDirectories(path.resolve("src"));
+
         // Criar ficheiros de teste (.java e .outro, para teste)
-        Files.write(path.resolve("A.java"), "public class A { void funcaoVazia() {} }".getBytes());
-        Files.write(path.resolve("B.java"), "public class B { int soma; int sum(int a, int b){ return a+b; } }".getBytes());
-        Files.write(path.resolve("C.txt"), "isto não é java".getBytes());
+        Files.write(srcPath.resolve("A.java"), "public class A { void funcaoVazia() {} }".getBytes());
+        Files.write(srcPath.resolve("B.java"), "public class B { int soma; int sum(int a, int b){ return a+b; } }".getBytes());
+        Files.write(srcPath.resolve("C.txt"), "isto não é java".getBytes());
 
         // Criar instância do FileScanner
         scanner = new FileScanner(path);
