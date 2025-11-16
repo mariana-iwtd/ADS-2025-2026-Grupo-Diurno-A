@@ -357,12 +357,12 @@ public class MetricCalculator {
             // vai buscar a classe de que herda
             binding[0] = binding[0].getSuperclass();
             // Para testar
-            System.out.println("Classe " + temp + " herda da classe " + binding[0].getName());
+            //System.out.println("Classe " + temp + " herda da classe " + binding[0].getName());
 
             // aumenta o contador
             DIT++;
             // Para teste
-            System.out.println("Numero de heranças atuais: " + DIT);
+            //System.out.println("Numero de herancas atuais: " + DIT);
         }
 
         return DIT;

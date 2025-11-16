@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane stylesheets="@style.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Grupo_Diurno_A.Controller">
+   <children>
+      <GridPane fx:id="gridPaneInicial">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="168.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="369.0" minWidth="10.0" prefWidth="257.4" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="174.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="244.8" minHeight="10.0" prefHeight="231.2" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="104.0" minHeight="0.0" prefHeight="31.19999999999999" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="62.400000000000034" minHeight="0.4000000000000341" prefHeight="30.199984741210983" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="54.39999999999998" minHeight="10.0" prefHeight="32.39999999999998" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="25.399999999999977" minHeight="10.0" prefHeight="15.399999999999977" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button fx:id="botaoEscolhaProjeto" alignment="CENTER" mnemonicParsing="false" onAction="#onSelecionarPasta" text="Escolha o Projeto Java" textAlignment="CENTER" textFill="#0f3b6d" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Button>
+            <ImageView fx:id="logotipo" fitHeight="178.0" fitWidth="296.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" />
+            <Label fx:id="pastaEscolhida" alignment="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+            <Button fx:id="botaoAnalisar" mnemonicParsing="false" onAction="#onAnalisar" text="Analisar Codigo" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Button>
+            <Label fx:id="labelPE" text="Pasta Escolhida:" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </Label>
+         </children>
+      </GridPane>
+      <GridPane fx:id="gridPaneTabela">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints fillHeight="false" maxHeight="1.7976931348623157E308" minHeight="30.4" prefHeight="30.4" valignment="TOP" vgrow="NEVER" />
+          <RowConstraints maxHeight="395.2" minHeight="10.0" prefHeight="380.8" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TableView fx:id="tabela" prefHeight="200.0" prefWidth="532.0" GridPane.rowIndex="1">
+              <columns>
+                  <TableColumn fx:id="colNome" prefWidth="150.0" text="Classe" />
+                  <TableColumn fx:id="colLOC" prefWidth="60.0" text="LOC" />
+                  <TableColumn fx:id="colNOM" prefWidth="60.0" text="NOM" />
+                  <TableColumn fx:id="colNOA" prefWidth="60.0" text="NOA" />
+                  <TableColumn fx:id="colDIT" prefWidth="60.0" text="DIT" />
+                  <TableColumn fx:id="colNOC" prefWidth="60.0" text="NOC" />
+                  <TableColumn fx:id="colCBO" prefWidth="60.0" text="CBO" />
+                  <TableColumn fx:id="colCC" prefWidth="80.0" text="CC" />
+                  <TableColumn fx:id="colNPRM" prefWidth="80.0" text="NPRM" />
+                  <TableColumn fx:id="colAvgLOC" prefWidth="120.0" text="Avg LOC/Method" />
+              </columns>
+            </TableView>
+            <Button fx:id="botaoVoltar" mnemonicParsing="false" onAction="#onVoltar" text="←" />
+         </children>
+      </GridPane>
+   </children>
+</StackPane>

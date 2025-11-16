@@ -1,0 +1,15 @@
+
+.root {
+    -dark-blue: #0F3C6F;
+    -light-blue: #B4DFE8;
+    -accent-color: #4CAF50;
+    -text-light: white;
+}
+
+.button {
+    -fx-background-color: -dark-blue;
+    -fx-border-color: -light-blue;
+    -fx-text-fill: -light-blue;
+    -fx-border-radius:20;
+    -fx-background-radius: 20;
+}

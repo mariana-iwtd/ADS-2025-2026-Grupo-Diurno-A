@@ -17,6 +17,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>8</maven.compiler.source>
     <maven.compiler.target>8</maven.compiler.target>
+    <javafx.version>21.0.5</javafx.version>
   </properties>
 
   <dependencies>
@@ -86,8 +87,29 @@
           <artifactId>maven-deploy-plugin</artifactId>
           <version>3.1.2</version>
         </plugin>
+
+        <!-- Plugin utilizado para a GUI -->
+        <plugin>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-maven-plugin</artifactId>
+          <version>0.0.8</version>
+          <configuration>
+            <mainClass>Grupo_Diurno_A.GUI</mainClass>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <configuration>
+          <mainClass>Grupo_Diurno_A.GUI</mainClass>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 
   <reporting>
