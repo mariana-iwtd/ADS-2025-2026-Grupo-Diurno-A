@@ -60,7 +60,8 @@ public class MetricCalculator {
                 public boolean visit(TypeDeclaration no){
                     String name= no.getName().toString();
                     int startLine = ast.getLineNumber(no.getStartPosition());
-                    int endLine = ast.getLineNumber(no.getStartPosition() + no.getLength())-1;
+                    int endLine = ast.getLineNumber(no.getStartPosition() + no.getLength() - 1);
+
                     ClassInfo classInfo = new ClassInfo(name, startLine, endLine);
 
                     classInfo.setMethods(getMethods(no, ast)); //preenche a lista de metodos da classe
@@ -484,7 +485,7 @@ public class MetricCalculator {
 
         // nao contar a propria classe
         types.remove(type.getName().getIdentifier());
-        System.out.println("Tipos da classe: " + types);
+        //System.out.println("Tipos da classe: " + types);
         return types.size();
 
     }

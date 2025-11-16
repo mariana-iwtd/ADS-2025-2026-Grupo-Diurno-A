@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -68,7 +69,45 @@
                   <TableColumn fx:id="colAvgLOC" prefWidth="120.0" text="Avg LOC/Method" />
               </columns>
             </TableView>
-            <Button fx:id="botaoVoltar" mnemonicParsing="false" onAction="#onVoltar" text="←" />
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="116.79999618530273" minWidth="10.0" prefWidth="114.79999618530273" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="122.2" minWidth="10.0" prefWidth="52.40000381469726" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="104.4" minWidth="10.0" prefWidth="43.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="107.6" minWidth="10.0" prefWidth="48.599999999999994" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.80001525878907" minWidth="10.0" prefWidth="46.39999999999998" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.60000000000002" minWidth="10.0" prefWidth="37.79998474121095" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="113.39999999999998" minWidth="10.0" prefWidth="45.80000000000001" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.80000000000001" minWidth="10.0" prefWidth="43.60000000000002" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="0.0" prefWidth="51.19999999999999" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="56.400000000000034" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0" prefWidth="66.79999999999995" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="botaoTabela" mnemonicParsing="false" onAction="#onBotaoTabela" text="Todos" GridPane.columnIndex="1" />
+                  <Button fx:id="botaoLOC" mnemonicParsing="false" onAction="#onLOC" text="LOC" GridPane.columnIndex="2" />
+                  <Button fx:id="botaoNOM" mnemonicParsing="false" onAction="#onNOM" text="NOM" GridPane.columnIndex="3" />
+                  <Button fx:id="botaoNOA" mnemonicParsing="false" onAction="#onNOA" text="NOA" GridPane.columnIndex="4" />
+                  <Button fx:id="botaoDIT" mnemonicParsing="false" onAction="#onDIT" text="DIT" GridPane.columnIndex="5" />
+                  <Button fx:id="botaoNOC" mnemonicParsing="false" onAction="#onNOC" text="NOC" GridPane.columnIndex="6" />
+                  <Button fx:id="botaoCBO" mnemonicParsing="false" onAction="#onCBO" text="CBO" GridPane.columnIndex="7" />
+                  <Button fx:id="botaoCC" mnemonicParsing="false" onAction="#onCC" prefHeight="27.0" prefWidth="46.0" text="MCC" GridPane.columnIndex="8" />
+                  <Button fx:id="botaoNPRM" mnemonicParsing="false" onAction="#onNPRM" text="NPRM" GridPane.columnIndex="9" />
+                  <Button fx:id="botaoAvgLOCMethod" mnemonicParsing="false" onAction="#onAvgLOC" text="AvgLOC" GridPane.columnIndex="10" />
+                  <Button fx:id="botaoVoltar" mnemonicParsing="false" onAction="#onVoltar" text="←" />
+               </children>
+            </GridPane>
+            <BarChart fx:id="grafico" prefHeight="200.0" prefWidth="600.0" GridPane.rowIndex="1">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </BarChart>
          </children>
       </GridPane>
    </children>

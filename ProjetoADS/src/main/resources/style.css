@@ -2,6 +2,7 @@
 .root {
     -dark-blue: #0F3C6F;
     -light-blue: #B4DFE8;
+    -darker-blue: #0A294D;
     -accent-color: #4CAF50;
     -text-light: white;
 }
@@ -13,3 +14,17 @@
     -fx-border-radius:20;
     -fx-background-radius: 20;
 }
+
+.button:pressed {
+    -fx-background-color: -darker-blue;
+}
+
+.button:hover {
+    -fx-background-color: #175BA8;   /* tom mais escuro */
+}
+
+.button-selecionado {
+    -fx-background-color: -darker-blue;
+}
+
+
