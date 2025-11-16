@@ -204,62 +204,70 @@ public class Controller {
             mostrarAlerta("Erro", "Nao selecionou nenhum ficheiro para analisar!");
             return;
         }
+        try {
+            //cria project analyser com o caminho do diretorio
+            analyser = new ProjectAnalyser(selectedDir.toPath());
 
-        //cria project analyser com o caminho do diretorio
-        analyser = new ProjectAnalyser(selectedDir.toPath());
+            if(analyser.getResults().isEmpty()){
+                mostrarAlerta("Erro", "O projeto selecionado nao contem classes Java validas para analisar.");
+                return;
+            }
 
-        //desativa e faz com que botoes desaparecam
-        gridPaneInicial.setOpacity(0);
-        gridPaneInicial.setDisable(true);
+            //desativa e faz com que botoes desaparecam
+            gridPaneInicial.setOpacity(0);
+            gridPaneInicial.setDisable(true);
 
-        botaoAnalisar.setOpacity(0);
-        botaoAnalisar.setDisable(true);
+            botaoAnalisar.setOpacity(0);
+            botaoAnalisar.setDisable(true);
 
-        botaoEscolhaProjeto.setOpacity(0);
-        botaoEscolhaProjeto.setDisable(true);
+            botaoEscolhaProjeto.setOpacity(0);
+            botaoEscolhaProjeto.setDisable(true);
 
-        labelPE.setOpacity(0);
-        pastaEscolhida.setOpacity(0);
+            labelPE.setOpacity(0);
+            pastaEscolhida.setOpacity(0);
 
-        logotipo.setOpacity(0);
-        logotipo.setDisable(true);
+            logotipo.setOpacity(0);
+            logotipo.setDisable(true);
 
-        //novo ecra
-        gridPaneTabela.setOpacity(1);
-        gridPaneTabela.setDisable(false);
+            //novo ecra
+            gridPaneTabela.setOpacity(1);
+            gridPaneTabela.setDisable(false);
 
-        preencheTabela();
-        tabela.setOpacity(1);
-        tabela.setDisable(false);
+            preencheTabela();
+            tabela.setOpacity(1);
+            tabela.setDisable(false);
 
-        botaoVoltar.setDisable(false);
-        botaoVoltar.setOpacity(1);
+            botaoVoltar.setDisable(false);
+            botaoVoltar.setOpacity(1);
 
-        botaoTabela.getStyleClass().add("button-selecionado");
-        botaoTabela.setDisable(false);
-        botaoTabela.setOpacity(1);
-        botaoLOC.setDisable(false);
-        botaoLOC.setOpacity(1);
-        botaoNOM.setDisable(false);
-        botaoNOM.setOpacity(1);
-        botaoNOA.setDisable(false);
-        botaoNOA.setOpacity(1);
-        botaoDIT.setDisable(false);
-        botaoDIT.setOpacity(1);
-        botaoNOC.setDisable(false);
-        botaoNOC.setOpacity(1);
-        botaoCBO.setDisable(false);
-        botaoCBO.setOpacity(1);
-        botaoCC.setDisable(false);
-        botaoCC.setOpacity(1);
-        botaoNPRM.setDisable(false);
-        botaoNPRM.setOpacity(1);
-        botaoAvgLOCMethod.setDisable(false);
-        botaoAvgLOCMethod.setOpacity(1);
+            botaoTabela.getStyleClass().add("button-selecionado");
+            botaoTabela.setDisable(false);
+            botaoTabela.setOpacity(1);
+            botaoLOC.setDisable(false);
+            botaoLOC.setOpacity(1);
+            botaoNOM.setDisable(false);
+            botaoNOM.setOpacity(1);
+            botaoNOA.setDisable(false);
+            botaoNOA.setOpacity(1);
+            botaoDIT.setDisable(false);
+            botaoDIT.setOpacity(1);
+            botaoNOC.setDisable(false);
+            botaoNOC.setOpacity(1);
+            botaoCBO.setDisable(false);
+            botaoCBO.setOpacity(1);
+            botaoCC.setDisable(false);
+            botaoCC.setOpacity(1);
+            botaoNPRM.setDisable(false);
+            botaoNPRM.setOpacity(1);
+            botaoAvgLOCMethod.setDisable(false);
+            botaoAvgLOCMethod.setOpacity(1);
 
-        Stage stage = (Stage) botaoAnalisar.getScene().getWindow();
-        stage.setWidth(850);
-        stage.setHeight(500);
+            Stage stage = (Stage) botaoAnalisar.getScene().getWindow();
+            stage.setWidth(850);
+            stage.setHeight(500);
+        }catch (RuntimeException e){
+            mostrarAlerta("Erro", "Ocorreu um erro ao analisar o projeto selecionado.\nCertifique-se que o projeto e' valido.");
+        }
     }
 
 
