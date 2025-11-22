@@ -13,25 +13,52 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Classe de testes unitarios para a classe {@code MetricCalculator}.
+ *
+ * Estes testes verificam se as metricas LOC, NOM, NOA, DIT, NOC, CBO, CC, NPRM e Avg LOC/Método
+ * sao calculadas corretamente.
+ *
+ * Os testes utilizam diretorios temporarios criados em {@link #setUpAll()} e removidos em {@link #tearDownAll()}.
+ *
+ * @see MetricCalculatorTest
+ */
 public class MetricCalculatorTest {
 
+    /** Instancia do {@code MetricCalculator} a ser testada. */
     private static MetricCalculator metricas;
+    /** Caminho temporario criado para simular a raiz do projeto. */
     private static Path path;
 
+    /** Objetos {@code ClassInfo} correspondentes as classes de teste. */
     private static ClassInfo A;
     private static ClassInfo B;
     private static ClassInfo C;
     private static ClassInfo D;
 
+    /**
+     * Configuracao inicial (executada uma vez antes de todos os testes).
+     *
+     * Cria um diretorio temporario e os 3 ficheiros Java:
+     * <ul>
+     *     <li><code>A.java</code> que contem 1 metodo com switch-case</li>
+     *     <li><code>B.java</code> contem 1 atributo e 1 metodo simple</li>
+     *     <li><code>C.java</code> contem uma classe aninhada D: contem 2 atributos e 2 metodos com if/else</li>
+     * </ul>
+     *
+     * para construir o AST (Abstract Syntax Tree) e inicializar o {@code MetricCalculator}.</p>
+     *
+     * @throws IOException Se ocorrer um erro durante a criação dos ficheiros.
+     */
     @BeforeAll
     static void setUpAll() throws IOException {
-        // Criar diretório temporário
+        // Criar diretorio temporario
         path = Files.createTempDirectory("projectTest");
 
-        // Criar subdiretório "src" que o FileScanner espera
+        // Criar subdiretorio "src" que o FileScanner espera
         Path srcPath = Files.createDirectories(path.resolve("src"));
 
-        // Ficheiro com um método que contém um switch-case
+        // Ficheiro com um metodo que contem um switch-case
         String classA =
                 "public class A extends B{\n" +
                         "    void exemploSwitch(int x) {\n" +
@@ -48,7 +75,7 @@ public class MetricCalculatorTest {
                         "    }\n" +
                         "}\n";
 
-        // Ficheiro com um atributo e um método simples
+        // Ficheiro com um atributo e um metodo simples
         String classB =
                 "public class B extends C{\n" +
                         "    int soma;\n" +
@@ -87,7 +114,7 @@ public class MetricCalculatorTest {
         Files.write(srcPath.resolve("B.java"), classB.getBytes());
         Files.write(srcPath.resolve("C.java"), classC.getBytes());
 
-        // Criar instância do FileScanner e do MetricCalculator
+        // Criar instancia do FileScanner e do MetricCalculator
         FileScanner scanner = new FileScanner(path);
         metricas = new MetricCalculator(scanner.getCompilationUnits());
 
@@ -99,6 +126,12 @@ public class MetricCalculatorTest {
 
     }
 
+    /**
+     * Metodo executado uma vez apos todos os testes.
+     * Limpa o diretorio temporario criado para os testes.
+     *
+     * @throws IOException se ocorrer erro na remocao dos ficheiros/diretorios
+     */
     @AfterAll
     static void tearDownAll() throws IOException {
         Files.walk(path)
@@ -107,7 +140,13 @@ public class MetricCalculatorTest {
                 .forEach(File::delete);
     }
 
-    public static ClassInfo getClass(String name){
+    /**
+     * Metodo utilitario para obter um objeto {@code ClassInfo} pelo seu nome.
+     *
+     * @param name O nome da classe a procurar.
+     * @return O objeto {@code ClassInfo} se encontrado, ou {@code null} caso contrario.
+     */
+    private static ClassInfo getClass(String name){
         List<ClassInfo> ci = metricas.getClasses();
 
         for(ClassInfo c : ci){
@@ -118,8 +157,18 @@ public class MetricCalculatorTest {
         return null;
     }
 
+    /**
+     * Testa se o objeto {@code MetricCalculator} foi criado corretamente.
+     *
+     * Verifica se
+     * <ul>
+     *     <li>a classe foi criadas;</li>
+     *     <li>a lista de classe nao e' nula;</li>
+     *     <li>o numero de classes encontradas e' o esperado (4: A, B, C, D);</li>
+     *     <li>cada classe esperada existe na lista.</li>
+     * </ul>
+     */
     @Test
-    // Verifica se o objeto MetricCalculator foi criado corretamente
     void testMetricCalculatorExists() {
         // Verifica se o Objeto é nulo
         assertNotNull(metricas, "O objeto metricas esta vazio");
@@ -140,8 +189,11 @@ public class MetricCalculatorTest {
         }
     }
 
-    // Verifica se as ClassInfo foram bem criadas;
-    // Verifica ao mesmo tempo se as metricas NOA e NOM estao bem
+    /**
+     * Testa a metrica de Numero de Metodos (NOM) e Numero de Atributos (NOA).
+     *
+     * Verifica a contagem de metodos e atributos de cada classe de teste.
+     */
     @Test
     void testClassInfo(){
         int NOM;
@@ -176,8 +228,12 @@ public class MetricCalculatorTest {
         assertEquals(2, NOA, "D tem 2 atributos e nao " + NOA);
     }
 
+    /**
+     * Testa a metrica de Complexidade Ciclomatica (CC).
+     *
+     * Verifica o calculo da complexidade esta correto.
+     */
     @Test
-    // Verifica se calcula a complexidade ciclomatica (MCC) de forma correta
     void testCalculateMCC() {
         int mcc = 0;
 
@@ -202,8 +258,12 @@ public class MetricCalculatorTest {
         assertEquals(6, mcc, "Complexidade da classe D dever ser 6 ((1 if + 1 while + 1 base)*2) e nao " + mcc);
     }
 
+    /**
+     * Testa a metrica de Linhas de Codigo (LOC).
+     *
+     * Verifica a contagem de linhas de codigo para cada classe.
+     */
     @Test
-    // Verifica se calcula o numero de linhas (LOC) corretamente
     void testCalculateLOC() {
         int LOC = 0;
         int esperado = 0;
@@ -233,8 +293,12 @@ public class MetricCalculatorTest {
         assertEquals(esperado, LOC, "D tem 20 linhas de codigo e nao " + LOC);
     }
 
+    /**
+     * Testa a metrica de Profundidade da Arvore de Herança (DIT - Depth of Inheritance Tree).
+     *
+     * Verifica a profundidade da herança de cada classe (contando a {@code Object} como 1).
+     */
     @Test
-    // Verifica se calcula a profundidade da heranca (DIT) corretamente
     void testCalculateDIT(){
         int DIT = 0;
 
@@ -259,8 +323,12 @@ public class MetricCalculatorTest {
         assertEquals(1, DIT, "A profundidade da herenca de D e 1 (Object) e nao " + DIT);
     }
 
+    /**
+     * Testa a metrica de Numero de Filhos (NOC - Number of Children).
+     *
+     * Verifica quantos filhos (subclasses) cada classe de teste possui.
+     */
     @Test
-    // Verifica se o numero de filhos e calculado de forma correta
     void testCalculateNOC(){
         int NOC = 0;
 
@@ -285,8 +353,12 @@ public class MetricCalculatorTest {
         assertEquals(0, NOC, "D tem 0 filhos e nao " + NOC);
     }
 
+    /**
+     * Testa a metrica de Media de Linhas de Codigo por Metodo (Avg LOC/Metodo).
+     *
+     * Verifica a razao entre o LOC e o NOM (Numero de Metodos) para cada classe.</p>
+     */
     @Test
-    // Verifica se a media de linhas de codigo por metodo esta correta
     void testAvgLocMethod(){
         double Avg = 0;
         double esperado = 0;
@@ -320,8 +392,13 @@ public class MetricCalculatorTest {
         assertEquals(esperado, Avg, "A media de linhas de codigo por metodo de D e " + esperado + " e nao " + Avg);
     }
 
+    /**
+     * Testa a metrica de Acoplamento entre Objetos (CBO - Coupling Between Objects).
+     *
+     * Verifica o numero de outras classes a que a classe de teste esta acoplada
+     * (e.g., por herança, utilizacao de atributos, ou chamadas de metodo).
+     */
     @Test
-    // Verifica se o calculo de acupolamento?? esta correto
     void testCalculateCBO(){
         int CBO = 0;
         int esperado = 0;
@@ -351,8 +428,12 @@ public class MetricCalculatorTest {
         assertEquals(esperado, CBO, "D tem " + esperado + " acupolamento e nao " + CBO);
     }
 
+    /**
+     * Testa a metrica de Numero Medio de Parametros por Metodo (NPRM - Number of Parameters per Method).
+     *
+     * Verifica a media do numero de parametros em todos os metodos da classe.
+     */
     @Test
-    // Verifica se calcula o numero medio de parametros por metodo
     void testCalculateNPRM() {
         double NPRM = 0;
         int esperado = 0;
