@@ -65,8 +65,12 @@ public class ProjectAnalyser {
         return classInfos;
     }
 
-    // TODO Completar quando fizermos a class CSVmaker
-    public void exportResults(Path path){
-
+    /**
+     * Exporta os resultados da analise para um ficheiro CSV no caminho especificado.
+     *
+     * @param path O caminho onde o ficheiro CSV sera salvo.
+     */
+    public void exportResults(String path){
+        new CSVmaker(path, classInfos);
     }
 }
