@@ -11,17 +11,42 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Classe de testes para a classe {@link CSVmaker}.
+ * Verifica a correta criacao do ficheiro CSV e os dados nele contidos.
+ */
 class CSVmakerTest {
 
-    // pasta de testes criada automaticamente pelo JUnit - e' eliminada apos os testes
+    /**
+     * Pasta temporaria para os testes. E' criada automaticamente pelo JUnit antes dos testes
+     * e eliminada apos a execucao dos mesmos.
+     * Vai ser usada para guardar o ficheiro CSV gerado durante os testes.
+     */
     @TempDir
     static Path pastaTeste;
 
     // listas de classes para testes
+    /**
+     * Lista com uma classe (para testar CSV com uma classe).
+     */
     private static List<ClassInfo> classes1 = new ArrayList<>();
+
+    /**
+     * Lista com tres classes (para testar CSV com varias classes).
+     */
     private static List<ClassInfo> classes2 = new ArrayList<>();
+
+    /**
+     * Lista vazia (para testar CSV vazio).
+     */
     private static List<ClassInfo> classes3 = new ArrayList<>(); // lista vazia (para testar CSV vazio)
 
+    /**
+     * Configuracao inicial dos testes.
+     * Cria varias instancias de {@link ClassInfo} com diferentes caracteristicas
+     * para serem usadas nos diferentes testes. Adiciona as instancias 'as listas de teste.
+     * Esta funcao e' executada uma vez antes de todos os testes.
+     */
     @BeforeAll
     static void setUpAll() {
         // Classe 1 - tem um metodo e um atributo
@@ -60,7 +85,11 @@ class CSVmakerTest {
         classes2.add(class1);
     }
 
-    // testa CSV com lista vazia
+    /**
+     * Teste para verificar a criacao de um ficheiro CSV vazio (apenas com o cabecalho).
+     * Garante que o ficheiro e' criado corretamente e que o cabecalho esta conforme o esperado.
+     * @throws IOException
+     */
     @Test
     void testEmptyCSV() throws IOException {
         //adiciona o caminho do ficheiro CSV na pasta de teste - com a funcao resolve, para testar se depois estq correto
@@ -82,7 +111,12 @@ class CSVmakerTest {
         assertEquals(expectedHeader, lines.get(0), "O cabeçalho do CSV nao corresponde ao esperado.");
     }
 
-    //teste com uma classe
+    /**
+     * Teste para verificar a criacao de um ficheiro CSV com uma unica classe.
+     * Garante que o ficheiro e' criado corretamente e que os dados da classe estao corretos.
+     * Garante que o numero de colunas e' o esperado e que o nome da classe esta correto no CSV.
+     * @throws IOException
+     */
     @Test
     void testCSVComUmaClasse() throws IOException {
         //adiciona o caminho do ficheiro CSV na pasta de teste - com a funcao resolve, para testar se depois foi criado
@@ -107,7 +141,13 @@ class CSVmakerTest {
         assertEquals("TestClass1", cols[0], "O nome da classe na primeira coluna nao esta correto.");
     }
 
-    //teste com varias classes
+    /**
+     * Teste para verificar a criacao de um ficheiro CSV com varias classes.
+     * Garante que o ficheiro e' criado corretamente e que os dados das classes estao corretos.
+     * Garante que o numero de linhas e' o esperado, que os nomes das classes estao corretos
+     * no CSV e que estao na ordem correta.
+     * @throws IOException
+     */
     @Test
     void testCSVComVariasClasses() throws IOException {
         Path csvFile = pastaTeste.resolve("resultado_da_analise.csv");
