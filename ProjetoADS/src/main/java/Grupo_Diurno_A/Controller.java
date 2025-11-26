@@ -2,21 +2,18 @@ package Grupo_Diurno_A;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import org.eclipse.core.internal.resources.Project;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.nio.file.Path;
 
 
 public class Controller {
@@ -61,6 +58,9 @@ public class Controller {
     @FXML
     private Button botaoAvgLOCMethod;
 
+    @FXML
+    private Button botaoExportar;
+
 
     //Labels
     @FXML
@@ -75,12 +75,13 @@ public class Controller {
     private ImageView logotipo;
 
 
-    //Grids
+    //Estruturas de cada ecra
     @FXML
-    private GridPane gridPaneInicial;
+    private VBox vBoxInicial;
 
     @FXML
-    private GridPane gridPaneTabela;
+    private BorderPane paneResultados;
+
 
     //Tabela
     @FXML
@@ -135,10 +136,13 @@ public class Controller {
         pastaEscolhida.setOpacity(0);
 
         //janela da tabela
-        gridPaneTabela.setOpacity(0);
-        gridPaneTabela.setDisable(true);
+        paneResultados.setOpacity(0);
+        paneResultados.setDisable(true);
+        paneResultados.setManaged(false);
         botaoVoltar.setDisable(true);
         botaoVoltar.setOpacity(0);
+        botaoExportar.setOpacity(0);
+        botaoExportar.setDisable(true);
         tabela.setOpacity(0);
         tabela.setDisable(true);
         grafico.setOpacity(0);
@@ -195,6 +199,11 @@ public class Controller {
             pastaEscolhida.setOpacity(1);
             labelPE.setOpacity(1);
         }
+        else{
+            //Poe labels invisiveis caso nao tenha selecionado nada
+            pastaEscolhida.setOpacity(0);
+            labelPE.setOpacity(0);
+        }
     }
 
     @FXML
@@ -214,8 +223,8 @@ public class Controller {
             }
 
             //desativa e faz com que botoes desaparecam
-            gridPaneInicial.setOpacity(0);
-            gridPaneInicial.setDisable(true);
+            vBoxInicial.setOpacity(0);
+            vBoxInicial.setDisable(true);
 
             botaoAnalisar.setOpacity(0);
             botaoAnalisar.setDisable(true);
@@ -230,8 +239,9 @@ public class Controller {
             logotipo.setDisable(true);
 
             //novo ecra
-            gridPaneTabela.setOpacity(1);
-            gridPaneTabela.setDisable(false);
+            paneResultados.setOpacity(1);
+            paneResultados.setDisable(false);
+            paneResultados.setManaged(true);
 
             preencheTabela();
             tabela.setOpacity(1);
@@ -239,6 +249,9 @@ public class Controller {
 
             botaoVoltar.setDisable(false);
             botaoVoltar.setOpacity(1);
+
+            botaoExportar.setDisable(false);
+            botaoExportar.setOpacity(1);
 
             botaoTabela.getStyleClass().add("button-selecionado");
             botaoTabela.setDisable(false);
@@ -292,15 +305,18 @@ public class Controller {
         tabela.setDisable(true);
         grafico.setOpacity(0);
         grafico.setDisable(true);
-        gridPaneTabela.setOpacity(0);
-        gridPaneTabela.setDisable(true);
+        paneResultados.setOpacity(0);
+        paneResultados.setDisable(true);
+        paneResultados.setManaged(false);
         botaoVoltar.setOpacity(0);
         botaoVoltar.setDisable(true);
+        botaoExportar.setOpacity(0);
+        botaoExportar.setDisable(true);
 
 
         //voltam a aparecer os botoes e grid
-        gridPaneInicial.setOpacity(1);
-        gridPaneInicial.setDisable(false);
+        vBoxInicial.setOpacity(1);
+        vBoxInicial.setDisable(false);
 
         botaoAnalisar.setOpacity(1);
         botaoAnalisar.setDisable(false);
@@ -316,7 +332,7 @@ public class Controller {
 
         Stage stage = (Stage) botaoVoltar.getScene().getWindow();
         stage.setWidth(400);
-        stage.setHeight(400);
+        stage.setHeight(405);
     }
 
     private void limparSelecaoBotoes() {
@@ -340,6 +356,8 @@ public class Controller {
             grafico.setDisable(true);
             tabela.setOpacity(1);
             tabela.setDisable(false);
+            botaoExportar.setOpacity(1);
+            botaoExportar.setDisable(false);
         }
     }
 
@@ -450,6 +468,33 @@ public class Controller {
         preencherGrafico("Media do Numero de Linhas por Classe", avgLocs);
     }
 
+    public void onExportar(){
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Selecione onde deseja guardar o ficheiro: ");
+
+        // Abrir o dialogo e guardar a pasta escolhida
+        File pasta = chooser.showDialog(null);
+
+        if(pasta != null) {
+            try {
+                analyser.exportResults(pasta.getAbsolutePath());
+
+                //mostra que transferiu o ficheiro com sucesso
+                Alert alertaSucesso = new Alert(Alert.AlertType.INFORMATION);
+                alertaSucesso.setTitle("Sucesso");
+                alertaSucesso.setHeaderText(null);
+                alertaSucesso.setContentText("O ficheiro CSV foi transferido com sucesso!");
+                alertaSucesso.showAndWait();
+
+            } catch (Exception e) {
+                //caso ocorra um erro
+                mostrarAlerta("Nao foi possivel exportar", "Ocorreu um erro: " + e.getMessage());
+            }
+        }
+    }
+
+
+
     private void changeSelectedButtonColor(Button botao){
         limparSelecaoBotoes();
         botao.getStyleClass().add("button-selecionado");
@@ -462,6 +507,8 @@ public class Controller {
             grafico.setDisable(false);
             tabela.setOpacity(0);
             tabela.setDisable(true);
+            botaoExportar.setOpacity(0);
+            botaoExportar.setDisable(true);
         }
     }
 
@@ -490,6 +537,8 @@ public class Controller {
         alert.setTitle("Erro");
         alert.setHeaderText(titulo);
         alert.setContentText(msg);
+        alert.setResizable(true);
+        alert.getDialogPane().setMinWidth(500);
         alert.showAndWait();
     }
 

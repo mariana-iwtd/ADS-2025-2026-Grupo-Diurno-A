@@ -11,24 +11,25 @@ import java.util.Map;
 import java.util.ArrayList;
 
 /**
- * A classe {@code MetricCalculator} é responsável por calcular as métricas das
- * diferentes classes e métodos, a partir das árvores de sintaxe abstrata (AST)
+ * A classe {@code MetricCalculator} e' responsavel por calcular as metricas das
+ * diferentes classes e metodos, a partir das arvores de sintaxe abstrata (AST)
  * previamente geradas pela classe {@link FileScanner}.
  *
- * <p>Analisa cada unidade de compilação para extrair informações relevantes sobre
- * a estrutura e complexidade do código, permitindo a avaliação de qualidade e
- * manutenção de software.</p>
+ * <p>Analisa cada unidade de compilacao para extrair informacoes relevantes sobre
+ * a estrutura e complexidade do codigo, permitindo a avaliacao de qualidade e
+ * manutencao de software.</p>
  *
- * <p>Compatível com as estruturas AST produzidas pela API JDT do Eclipse.</p>
+ * <p>Compativel com as estruturas AST produzidas pela API JDT do Eclipse.</p>
  */
 public class MetricCalculator {
 
-    /** Lista de informações de classes analisadas. */
+    /** Lista de informacoes de classes analisadas. */
     private List<ClassInfo> classes;
 
     /**
      * Construtor principal. Recebe a lista de ASTs e inicia o processo
-     * @param asts lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
+     *
+     * @param asts lista de {@link CompilationUnit} correspondentes 'as ASTs dos ficheiros a analisar
      */
     public MetricCalculator(List<CompilationUnit> asts){
         classes = extractClassInfo(asts);
@@ -37,8 +38,9 @@ public class MetricCalculator {
     //getter
 
     /**
-     * Retorna a lista de informações de classes analisadas.
-     * @return Lista de informações de classes ({@link ClassInfo}) calculadas
+     * Retorna a lista de informacoes de classes analisadas.
+     *
+     * @return Lista de informacoes de classes ({@link ClassInfo}) calculadas
      */
     public List<ClassInfo> getClasses() {
         return classes;
@@ -46,10 +48,11 @@ public class MetricCalculator {
 
 
     /**
-     * Extrai informações de classes a partir das árvores de sintaxe abstrata (AST)
-     * Calcula as métricas para cada classe encontrada. e Junta todas as informacoes numa lista de ClassInfo
-     * @param asts lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
-     * @return Lista de informações de classes ({@link ClassInfo}) extraídas das ASTs fornecidas
+     * Extrai informacoes de classes a partir das arvores de sintaxe abstrata (AST)
+     * Calcula as metricas para cada classe encontrada e junta todas as informacoes numa lista de ClassInfo
+     *
+     * @param asts lista de {@link CompilationUnit} correspondentes 'as ASTs dos ficheiros a analisar
+     * @return Lista de informacoes de classes ({@link ClassInfo}) extraidas das ASTs fornecidas
      */
     private List<ClassInfo> extractClassInfo(List<CompilationUnit> asts){
         final List <ClassInfo> classInfos = new ArrayList<>();
@@ -75,7 +78,7 @@ public class MetricCalculator {
 
 
                     //--------------------CALCULAR MEDIA LOC POR METODO-----------------------
-                    //AvgLOCMethod = LOC / NOM ou seja o número de linhas da classe dividido pelo nuero de metodos da mesma
+                    //AvgLOCMethod = LOC / NOM ou seja o numero de linhas da classe dividido pelo numero de metodos da mesma
                     if(classInfo.getNom()!=0)
                         classInfo.setAvgLocMethod((double)(classInfo.getLoc()/classInfo.getNom()));
                     else
@@ -90,10 +93,11 @@ public class MetricCalculator {
     }
 
     /**
-     * Preeenche a lista de métodos de uma classe. Com base no TypeDeclaration.
+     * Preeenche a lista de metodos de uma classe com base no TypeDeclaration.
      * Preenche tambem a complexidade ciclomatica de cada metodo, as linhas de codigo e o numero de parametros.
-     * @param type nó {@link TypeDeclaration} correspondente à classe a analisar
-     * @param ast nó {@link CompilationUnit} correspondente à AST do ficheiro a analisar
+     *
+     * @param type no' {@link TypeDeclaration} correspondente 'a classe a analisar
+     * @param ast no' {@link CompilationUnit} correspondente 'a AST do ficheiro a analisar
      * @return
      */
     private List<MethodInfo> getMethods(TypeDeclaration type, CompilationUnit ast){
@@ -132,8 +136,9 @@ public class MetricCalculator {
     }
 
     /**
-     * Preeenche a lista de atributos de uma classe. Com base no TypeDeclaration.
-     * @param type nó {@link TypeDeclaration} correspondente à classe a analisar
+     * Preeenche a lista de atributos de uma classe com base no TypeDeclaration.
+     *
+     * @param type no' {@link TypeDeclaration} correspondente 'a classe a analisar
      * @return Lista de atributos ({@link AtributeInfo}) da classe analisada
      */
     private List<AtributeInfo> getAtributes(TypeDeclaration type){
@@ -178,12 +183,12 @@ public class MetricCalculator {
     }
 
     /**
-     * Calcula a complexidade ciclomática (CC) de um método específico.
-     * @param method nó {@link MethodDeclaration} correspondente ao método a analisar
-     * @return Complexidade ciclomática do método analisado
+     * Calcula a complexidade ciclomatica (CC) de um metodo especifico.
+     * @param method no' {@link MethodDeclaration} correspondente ao metodo a analisar
+     * @return Complexidade ciclomatica do metodo analisado
      */
     private int calculateCC_method(MethodDeclaration method){
-        final int[] CC = {1}; //complexidade ciclomática inicia em 1
+        final int[] CC = {1}; //complexidade ciclomatica inicia em 1
         //System.out.println("A analisar metodo " + method.getName());
 
         method.accept(new ASTVisitor() {
@@ -240,11 +245,11 @@ public class MetricCalculator {
             }
 
             // Verifica se existem switchs
-            // se houver, retorna true para permitir avaliar o nº de cases
+            // se houver, retorna true para permitir avaliar o numero de cases
             @Override
             public boolean visit(SwitchStatement node) {
                 // Teste
-                //System.out.println("Tem switch então vamos verificar o nº de cases");
+                //System.out.println("Tem switch entao vamos verificar o numero de cases");
 
                 return true;
             }
@@ -288,13 +293,13 @@ public class MetricCalculator {
 
     //--------------- NPRM: Number of Parameters per Method --------------------------
     /**
-     * Calcula a métrica NPRM (Number of Parameters per Method) para uma classe.
-     * Esta métrica representa o número médio de parâmetros por método declarado
+     * Calcula a metrica NPRM (Number of Parameters per Method) para uma classe.
+     * Esta metrica representa o numero medio de parametros por metodo declarado
      * numa determinada classe.
      *
-     * @param classInfo Informção da classe a analisar ({@link ClassInfo})
+     * @param classInfo Informacao da classe a analisar ({@link ClassInfo})
      * @return O valor NPRM da classe.
-     *         Caso a classe não tenha métodos, retorna 0 para evitar divisão por zero.
+     *         Caso a classe nao tenha metodos, retorna 0 para evitar divisao por zero.
      */
     private double calculateNPRM(ClassInfo classInfo){
         List<MethodInfo> metodos = classInfo.getMethods();
@@ -315,18 +320,18 @@ public class MetricCalculator {
     //--------------- DIT: Depth of Inheritance Tree --------------------------
 
     /**
-     * Calcula o número de níveis de herança entre a classe analisada e
+     * Calcula o numero de niveis de heranca entre a classe analisada e
      * a classe raiz da hierarquia (normalmente {@code java.lang.Object}).
      *
-     * @param type nó {@link TypeDeclaration} correspondente à classe a analisar
+     * @param type no' {@link TypeDeclaration} correspondente 'a classe a analisar
      * @return DIT da classe analisada.
      */
     public int calculateDIT(TypeDeclaration type){
 
-        //Variavel que vai guardar as informacoes completas da classe (nome, herencas, ...)
+        //Variavel que vai guardar as informacoes completas da classe (nome, herancas, ...)
         // Foi feita desta maneira para poder chama-la dentro da funcao visit
         final ITypeBinding[] binding = new ITypeBinding[1];
-        // variavel que guarda o numero herenças da classe
+        // variavel que guarda o numero herancas da classe
         int DIT = 0;
 
         // Vamos percorrer a AST para encontrar o binding da classe
@@ -372,10 +377,10 @@ public class MetricCalculator {
     //--------------- MCC: McCabe (Complexidade Ciclomatica) --------------------------
 
     /**
-     * Calcula a métrica de complexidade ciclomática (MCC) de uma classe.
+     * Calcula a metrica de complexidade ciclomatica (MCC) de uma classe.
      *
-     * @param classInfo Informação da classe a analisar ({@link ClassInfo}).
-     * @return A complexidade ciclomática total da classe.
+     * @param classInfo Informacao da classe a analisar ({@link ClassInfo}).
+     * @return A complexidade ciclomatica total da classe.
      */
     public int calculateMCC(ClassInfo classInfo){
         //System.out.println(" A analisar MCC da class " + classInfo.getName());
@@ -394,12 +399,12 @@ public class MetricCalculator {
     //--------------- NOC: Number of Children --------------------------
 
     /**
-     * <p>Verifica se o nó recebido representa uma classe filha de uma classe
+     * <p>Verifica se o no' recebido representa uma classe filha de uma classe
      * com o nome dado.</p>
      *
-     * @param parentName    nome da classe que se pretende verificar se é classe mãe
-     * @param no            nó {@link TypeDeclaration} correspondente à classe a analisar
-     * @return              {@code true} se o nó representar uma subclasse de {@code parentName}, caso contrário {@code false}
+     * @param parentName    nome da classe que se pretende verificar se e' classe mae
+     * @param no            no' {@link TypeDeclaration} correspondente 'a classe a analisar
+     * @return              {@code true} se o no' representar uma subclasse de {@code parentName}, caso contrario {@code false}
      */
     private static boolean isSon(String parentName, TypeDeclaration no){
         //Versao para conseguir ver os nomes dos filhos todo tirar tudo quando
@@ -415,10 +420,10 @@ public class MetricCalculator {
     }
 
     /**
-     * <p>Calcula a métrica NOC (<i>Number of Children</i>) para cada classe
-     * presente nas árvores de sintaxe abstrata (AST) fornecidas.</p>
+     * <p>Calcula a metrica NOC (<i>Number of Children</i>) para cada classe
+     * presente nas arvores de sintaxe abstrata (AST) fornecidas.</p>
      *
-     * @param asts  lista de {@link CompilationUnit} correspondentes às ASTs dos ficheiros a analisar
+     * @param asts  lista de {@link CompilationUnit} correspondentes 'as ASTs dos ficheiros a analisar
      * @return      o valor NOC da classe analisada
      */
     public static int calculateNOC(List<CompilationUnit> asts, TypeDeclaration type){
@@ -446,16 +451,16 @@ public class MetricCalculator {
 
     //--------------- CBO: Coupling Between Objects --------------------------
     /**
-     * <p>Calcula a métrica CBO (<i>Coupling Between Objects</i>) para uma classe
+     * <p>Calcula a metrica CBO (<i>Coupling Between Objects</i>) para uma classe
      *
-     * Conta o número de classes distintas com as quais a classe analisada, através de herança,
-     * interfaces implementadas, tipos de campos, tipos de retorno de métodos,
-     * @param type nó {@link TypeDeclaration} correspondente à classe a analisar
+     * Conta o numero de classes distintas com as quais a classe analisada, atraves de heranca,
+     * interfaces implementadas, tipos de campos, tipos de retorno de metodos,
+     * @param type no' {@link TypeDeclaration} correspondente 'a classe a analisar
      * @return o valor CBO da classe analisada
      */
     public int calculateCBO(TypeDeclaration type){
         List<String> types = new ArrayList<>();
-        // Herança
+        // Heranca
         if (type.getSuperclassType() != null)
             types = addType(type.getSuperclassType(), types);
 
@@ -491,8 +496,8 @@ public class MetricCalculator {
     }
 
     /**
-     * Adiciona o nome do tipo à lista de tipos distintos,
-     * se não for um tipo primitivo, e se ainda não estiver na lista.
+     * Adiciona o nome do tipo 'a lista de tipos distintos,
+     * se nao for um tipo primitivo, e se ainda nao estiver na lista.
      * @param type tipo a adicionar
      * @param types lista de tipos distintos
      * @return lista atualizada de tipos distintos
@@ -564,7 +569,7 @@ public class MetricCalculator {
         List<ClassInfo> c= m.getClasses();
 
         System.out.println(c.get(5).getMethods().get(0).getName());
-        //System.out.println(c.get(0).getMethods().get(4).getName());//da erro pk a classe alvo n tem 5 metodos o que significa que a lista está correta :)
+        //System.out.println(c.get(0).getMethods().get(4).getName());//da erro pk a classe alvo n tem 5 metodos o que significa que a lista esta correta :)
         System.out.println(c.get(8).getNoc()); //tem de dar 9 -no meu deu 10 pk tinha uma classe a mais no projeto e estive uns 20 minutos a tentar perceber o erro
         System.out.println(c.get(1).getDit());
 
@@ -605,7 +610,7 @@ public class MetricCalculator {
                         "    List<String> nomes;   // conta List<String>\n" +
                         "    B b;                  // conta B\n" +
                         "\n" +
-                        "    D[] m(C c) throws IOException { // conta D[] (não normaliza), C e IOException\n" +
+                        "    D[] m(C c) throws IOException { // conta D[] (nao normaliza), C e IOException\n" +
                         "        return null;\n" +
                         "    }\n" +
                         "\n" +

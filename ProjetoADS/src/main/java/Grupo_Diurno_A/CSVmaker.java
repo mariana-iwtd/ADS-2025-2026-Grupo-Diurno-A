@@ -32,7 +32,7 @@ public class CSVmaker {
      * @param filePath O caminho do diretorio onde o ficheiro sera criado.
      * @param data A lista de objetos {@code ClassInfo} contendo os dados a exportar.
      */
-    public CSVmaker(String filePath, List<ClassInfo> data){
+    public CSVmaker(String filePath, List<ClassInfo> data) throws IOException {
         this.filePath = filePath;
         export(data);
     }
@@ -45,37 +45,32 @@ public class CSVmaker {
      *
      * @param data A lista de objetos {@code ClassInfo} a serem escritos no ficheiro.
      */
-    private void export(List<ClassInfo> data){
+    private void export(List<ClassInfo> data) throws IOException {
 
         // cria a ficheiro no caminho dado pelo user
         File file = new File(filePath + "/resultado_da_analise.csv");
-        try{
-            //cria um FileWriter que nos permite escrever no ficheiro criadp
-            FileWriter fileWriter = new FileWriter(file);
+        //cria um FileWriter que nos permite escrever no ficheiro criado
+        FileWriter fileWriter = new FileWriter(file);
 
-            //cria CSVWriter que nos permite escrever no ficheiro em formato CSV
-            // mudei o dilimitador para ';', para formatar de forma correta quando abrimos o ficheiro
-            CSVWriter csvWriter = new CSVWriter(fileWriter, ';',
-                                                                CSVWriter.NO_QUOTE_CHARACTER,
-                                                                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                                                                CSVWriter.DEFAULT_LINE_END);
+        //cria CSVWriter que nos permite escrever no ficheiro em formato CSV
+        // mudei o delimitador para ';', para formatar de forma correta quando abrimos o ficheiro
+        CSVWriter csvWriter = new CSVWriter(fileWriter, ';',
+                                                            CSVWriter.NO_QUOTE_CHARACTER,
+                                                            CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                                                            CSVWriter.DEFAULT_LINE_END);
 
-            // Adiciona a 1 linha do ficheiro, header
-            String[] header = {"Classe", "LOC", "NOM", "NOA", "DIT", "NOC", "CBO", "CC", "NPRM", "Avg LOC por metodo"};
-            csvWriter.writeNext(header);
+        // Adiciona a 1 linha do ficheiro, header
+        String[] header = {"Classe", "LOC", "NOM", "NOA", "DIT", "NOC", "CBO", "CC", "NPRM", "Avg LOC por metodo"};
+        csvWriter.writeNext(header);
 
-            // preenche as linhas com os dados da lista data
-            for(ClassInfo c : data){
-                String[] line = getNextLine(c);
-                csvWriter.writeNext(line);
-            }
-
-            csvWriter.close();
-            fileWriter.close();
-
-        } catch (Exception e){
-            e.printStackTrace();
+        // preenche as linhas com os dados da lista data
+        for(ClassInfo c : data){
+            String[] line = getNextLine(c);
+            csvWriter.writeNext(line);
         }
+
+        csvWriter.close();
+        fileWriter.close();
     }
 
     /**
@@ -121,7 +116,11 @@ public class CSVmaker {
         MetricCalculator m = new MetricCalculator(asts);
         List<ClassInfo> c= m.getClasses();
 
-        CSVmaker csv = new CSVmaker("/Users/nadiagavancha/Documents/mestrado/ADS/teste", c);
+        try {
+            CSVmaker csv = new CSVmaker("/Users/nadiagavancha/Documents/mestrado/ADS/teste", c);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
 
         System.out.println(c.get(5).getMethods().get(0).getName());
         //System.out.println(c.get(0).getMethods().get(4).getName());//da erro pk a classe alvo n tem 5 metodos o que significa que a lista está correta :)

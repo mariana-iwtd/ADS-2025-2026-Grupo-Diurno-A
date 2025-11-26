@@ -1,5 +1,6 @@
 package Grupo_Diurno_A;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class ProjectAnalyser {
      *
      * @param path O caminho onde o ficheiro CSV sera salvo.
      */
-    public void exportResults(String path){
+    public void exportResults(String path) throws IOException {
         new CSVmaker(path, classInfos);
     }
 }

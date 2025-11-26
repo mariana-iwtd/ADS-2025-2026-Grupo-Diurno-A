@@ -6,109 +6,81 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane stylesheets="@style.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Grupo_Diurno_A.Controller">
+<StackPane stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Grupo_Diurno_A.Controller">
    <children>
-      <GridPane fx:id="gridPaneInicial">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="168.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="369.0" minWidth="10.0" prefWidth="257.4" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="174.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints maxHeight="244.8" minHeight="10.0" prefHeight="231.2" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="104.0" minHeight="0.0" prefHeight="31.19999999999999" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="62.400000000000034" minHeight="0.4000000000000341" prefHeight="30.199984741210983" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="54.39999999999998" minHeight="10.0" prefHeight="32.39999999999998" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="66.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="25.399999999999977" minHeight="10.0" prefHeight="15.399999999999977" vgrow="SOMETIMES" />
-        </rowConstraints>
+      <VBox fx:id="vBoxInicial" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" StackPane.alignment="CENTER">
          <children>
-            <Button fx:id="botaoEscolhaProjeto" alignment="CENTER" mnemonicParsing="false" onAction="#onSelecionarPasta" text="Escolha o Projeto Java" textAlignment="CENTER" textFill="#0f3b6d" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </Button>
-            <ImageView fx:id="logotipo" fitHeight="178.0" fitWidth="296.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" />
-            <Label fx:id="pastaEscolhida" alignment="CENTER" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </Label>
-            <Button fx:id="botaoAnalisar" mnemonicParsing="false" onAction="#onAnalisar" text="Analisar Codigo" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="4" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </Button>
-            <Label fx:id="labelPE" text="Pasta Escolhida:" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </Label>
+            <ImageView fx:id="logotipo" fitHeight="223.0" fitWidth="391.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="labelPE" text="Pasta Escolhida:" />
+            <Label fx:id="pastaEscolhida" alignment="CENTER" text="Label" textAlignment="CENTER" />
+            <Button fx:id="botaoEscolhaProjeto" alignment="CENTER" mnemonicParsing="false" onAction="#onSelecionarPasta" text="Escolha o Projeto Java" textAlignment="CENTER" textFill="#0f3b6d" />
+            <Button fx:id="botaoAnalisar" mnemonicParsing="false" onAction="#onAnalisar" text="Analisar Codigo">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin></Button>
          </children>
-      </GridPane>
-      <GridPane fx:id="gridPaneTabela">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints fillHeight="false" maxHeight="1.7976931348623157E308" minHeight="30.4" prefHeight="30.4" valignment="TOP" vgrow="NEVER" />
-          <RowConstraints maxHeight="395.2" minHeight="10.0" prefHeight="380.8" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <TableView fx:id="tabela" prefHeight="200.0" prefWidth="532.0" GridPane.rowIndex="1">
-              <columns>
-                  <TableColumn fx:id="colNome" prefWidth="150.0" text="Classe" />
-                  <TableColumn fx:id="colLOC" prefWidth="60.0" text="LOC" />
-                  <TableColumn fx:id="colNOM" prefWidth="60.0" text="NOM" />
-                  <TableColumn fx:id="colNOA" prefWidth="60.0" text="NOA" />
-                  <TableColumn fx:id="colDIT" prefWidth="60.0" text="DIT" />
-                  <TableColumn fx:id="colNOC" prefWidth="60.0" text="NOC" />
-                  <TableColumn fx:id="colCBO" prefWidth="60.0" text="CBO" />
-                  <TableColumn fx:id="colCC" prefWidth="80.0" text="CC" />
-                  <TableColumn fx:id="colNPRM" prefWidth="80.0" text="NPRM" />
-                  <TableColumn fx:id="colAvgLOC" prefWidth="120.0" text="Avg LOC/Method" />
-              </columns>
-            </TableView>
-            <GridPane>
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="116.79999618530273" minWidth="10.0" prefWidth="114.79999618530273" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="122.2" minWidth="10.0" prefWidth="52.40000381469726" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="104.4" minWidth="10.0" prefWidth="43.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="107.6" minWidth="10.0" prefWidth="48.599999999999994" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="101.80001525878907" minWidth="10.0" prefWidth="46.39999999999998" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.60000000000002" minWidth="10.0" prefWidth="37.79998474121095" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="113.39999999999998" minWidth="10.0" prefWidth="45.80000000000001" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.80000000000001" minWidth="10.0" prefWidth="43.60000000000002" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="0.0" prefWidth="51.19999999999999" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="56.400000000000034" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0" prefWidth="66.79999999999995" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+      </VBox>
+      <BorderPane fx:id="paneResultados" prefHeight="200.0" prefWidth="200.0">
+         <center>
+            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="botaoTabela" mnemonicParsing="false" onAction="#onBotaoTabela" text="Todos" GridPane.columnIndex="1" />
-                  <Button fx:id="botaoLOC" mnemonicParsing="false" onAction="#onLOC" text="LOC" GridPane.columnIndex="2" />
-                  <Button fx:id="botaoNOM" mnemonicParsing="false" onAction="#onNOM" text="NOM" GridPane.columnIndex="3" />
-                  <Button fx:id="botaoNOA" mnemonicParsing="false" onAction="#onNOA" text="NOA" GridPane.columnIndex="4" />
-                  <Button fx:id="botaoDIT" mnemonicParsing="false" onAction="#onDIT" text="DIT" GridPane.columnIndex="5" />
-                  <Button fx:id="botaoNOC" mnemonicParsing="false" onAction="#onNOC" text="NOC" GridPane.columnIndex="6" />
-                  <Button fx:id="botaoCBO" mnemonicParsing="false" onAction="#onCBO" text="CBO" GridPane.columnIndex="7" />
-                  <Button fx:id="botaoCC" mnemonicParsing="false" onAction="#onCC" prefHeight="27.0" prefWidth="46.0" text="MCC" GridPane.columnIndex="8" />
-                  <Button fx:id="botaoNPRM" mnemonicParsing="false" onAction="#onNPRM" text="NPRM" GridPane.columnIndex="9" />
-                  <Button fx:id="botaoAvgLOCMethod" mnemonicParsing="false" onAction="#onAvgLOC" text="AvgLOC" GridPane.columnIndex="10" />
-                  <Button fx:id="botaoVoltar" mnemonicParsing="false" onAction="#onVoltar" text="←" />
+                  <TableView fx:id="tabela" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                    <columns>
+                        <TableColumn fx:id="colNome" prefWidth="150.0" text="Classe" />
+                        <TableColumn fx:id="colLOC" prefWidth="60.0" text="LOC" />
+                        <TableColumn fx:id="colNOM" prefWidth="60.0" text="NOM" />
+                        <TableColumn fx:id="colNOA" prefWidth="60.0" text="NOA" />
+                        <TableColumn fx:id="colDIT" prefWidth="60.0" text="DIT" />
+                        <TableColumn fx:id="colNOC" prefWidth="60.0" text="NOC" />
+                        <TableColumn fx:id="colCBO" prefWidth="60.0" text="CBO" />
+                        <TableColumn fx:id="colCC" prefWidth="80.0" text="CC" />
+                        <TableColumn fx:id="colNPRM" prefWidth="80.0" text="NPRM" />
+                        <TableColumn fx:id="colAvgLOC" prefWidth="120.0" text="Avg LOC/Method" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+                  <BarChart fx:id="grafico" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </BarChart>
                </children>
-            </GridPane>
-            <BarChart fx:id="grafico" prefHeight="200.0" prefWidth="600.0" GridPane.rowIndex="1">
-              <xAxis>
-                <CategoryAxis side="BOTTOM" />
-              </xAxis>
-              <yAxis>
-                <NumberAxis side="LEFT" />
-              </yAxis>
-            </BarChart>
-         </children>
-      </GridPane>
+            </StackPane>
+         </center>
+         <top>
+            <HBox fillHeight="false" spacing="5.0" styleClass="cabecalho-azul" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="botaoVoltar" mnemonicParsing="false" onAction="#onVoltar" styleClass="button-menu" text="←">
+                     <HBox.margin>
+                        <Insets right="40.0" />
+                     </HBox.margin></Button>
+                  <Button fx:id="botaoTabela" mnemonicParsing="false" onAction="#onBotaoTabela" styleClass="button-menu" text="Todos" />
+                  <Button fx:id="botaoLOC" mnemonicParsing="false" onAction="#onLOC" styleClass="button-menu" text="LOC" />
+                  <Button fx:id="botaoNOM" mnemonicParsing="false" onAction="#onNOM" styleClass="button-menu" text="NOM" />
+                  <Button fx:id="botaoNOA" mnemonicParsing="false" onAction="#onNOA" styleClass="button-menu" text="NOA" />
+                  <Button fx:id="botaoDIT" mnemonicParsing="false" onAction="#onDIT" styleClass="button-menu" text="DIT" />
+                  <Button fx:id="botaoNOC" mnemonicParsing="false" onAction="#onNOC" styleClass="button-menu" text="NOC" />
+                  <Button fx:id="botaoCBO" mnemonicParsing="false" onAction="#onCBO" styleClass="button-menu" text="CBO" />
+                  <Button fx:id="botaoCC" mnemonicParsing="false" onAction="#onCC" prefHeight="27.0" prefWidth="46.0" styleClass="button-menu" text="MCC" />
+                  <Button fx:id="botaoNPRM" mnemonicParsing="false" onAction="#onNPRM" styleClass="button-menu" text="NPRM" />
+                  <Button fx:id="botaoAvgLOCMethod" mnemonicParsing="false" onAction="#onAvgLOC" styleClass="button-menu" text="AvgLOC" />
+               </children>
+            </HBox>
+         </top>
+         <bottom>
+            <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="botaoExportar" mnemonicParsing="false" onAction="#onExportar" text="Exportar para CSV" />
+               </children>
+               <BorderPane.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </BorderPane.margin>
+            </HBox>
+         </bottom></BorderPane>
    </children>
 </StackPane>

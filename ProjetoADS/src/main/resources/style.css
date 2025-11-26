@@ -15,6 +15,14 @@
     -fx-background-radius: 20;
 }
 
+.button-menu {
+    -fx-background-color: transparent;
+    -fx-text-fill: -light-blue;
+    -fx-border-color: -light-blue;
+    -fx-border-radius:20;
+    -fx-background-radius:20;
+}
+
 .button:pressed {
     -fx-background-color: -darker-blue;
 }
@@ -25,6 +33,18 @@
 
 .button-selecionado {
     -fx-background-color: -darker-blue;
+}
+
+.cabecalho-azul {
+    -fx-background-color: -dark-blue;/*142d4c;*/
+    -fx-padding: 5;
+}
+
+.chart-bar {
+    -fx-background-color: #385170;
+    /* Se quiseres uma borda nas barras: */
+    -fx-border-color: #142d4c;
+    -fx-border-width: 1px;
 }
 
 
