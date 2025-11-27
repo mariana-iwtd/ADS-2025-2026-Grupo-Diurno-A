@@ -15,121 +15,239 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Classe {@code Controller} e' responsavel por gerir a interacao
+ * do utilizador com a interface grafica definida no ficheiro FXML.
+ * Contem os metodos ligados aos eventos dos botoes e elementos visuais.
+ */
 public class Controller {
 
-    //Butoes
+    //Botoes
+    /**
+     * Botao para escolher a pasta do projeto a analisar.
+     */
     @FXML
     private Button botaoEscolhaProjeto;
 
+    /**
+     * Botao para iniciar a analise do projeto selecionado.
+     */
     @FXML
     private Button botaoAnalisar;
 
+    /**
+     * Botao para voltar ao ecra inicial, de escolha de projeto.
+     */
     @FXML
     private Button botaoVoltar;
 
+    /**
+     * Botao para mostrar a tabela de resultados da analise.
+     */
     @FXML
     private Button botaoTabela;
 
+    /**
+     * Botao para mostrar o grafico de Linhas de Codigo por Classe(LOC).
+     */
     @FXML
     private Button botaoLOC;
 
+    /**
+     * Botao para mostrar o grafico de Numero de Metodos por Classe(NOM).
+     */
     @FXML
     private Button botaoNOM;
 
+    /**
+     * Botao para mostrar o grafico de Numero de Atributos por Classe(NOA).
+     */
     @FXML
     private Button botaoNOA;
 
+    /**
+     * Botao para mostrar o grafico de Profundidade da Arvore de Heranca por Classe(DIT).
+     */
     @FXML
     private Button botaoDIT;
 
+    /**
+     * Botao para mostrar o grafico de Numero de Filhos de cada Classe(NOC).
+     */
     @FXML
     private Button botaoNOC;
 
+    /**
+     * Botao para mostrar o grafico de Acoplamento entre Objetos por Classe(CBO).
+     */
     @FXML
     private Button botaoCBO;
 
+    /**
+     * Botao para mostrar o grafico de Complexidade Ciclomatica por Classe(CC).
+     */
     @FXML
     private Button botaoCC;
 
+    /**
+     * Botao para mostrar o grafico de Numero Medio de Parametros dos Metodos de Cada Classe(NPRM).
+     */
     @FXML
     private Button botaoNPRM;
 
+    /**
+     * Botao para mostrar o grafico de Media do Numero de Linhas por Classe(AvgLOCMethod).
+     */
     @FXML
     private Button botaoAvgLOCMethod;
 
+    /**
+     * Botao para exportar os resultados da analise para um ficheiro CSV.
+     */
     @FXML
     private Button botaoExportar;
 
 
     //Labels
+    /**
+     * Label que mostra o nome da pasta escolhida pelo utilizador.
+     */
     @FXML
     private Label pastaEscolhida;   //tera o nome da pasta que foi escolhida pelo user
 
+    /**
+     * Label que diz "Pasta Escolhida:" antes do nome da pasta escolhida.
+     */
     @FXML
     private Label labelPE; //label que diz "Pasta Escolhida:"
 
 
     //Logotipo
+    /**
+     * ImageView que contem o logotipo da aplicacao CodeMetrics Analyzer.
+     */
     @FXML
     private ImageView logotipo;
 
 
     //Estruturas de cada ecra
+    /**
+     * VBox que contem os elementos do ecra inicial (selecao de pasta e botao analisar).
+     */
     @FXML
     private VBox vBoxInicial;
 
+    /**
+     * BorderPane que contem os elementos do ecra de resultados (tabela de resultados, grafico e botoes).
+     */
     @FXML
     private BorderPane paneResultados;
 
 
     //Tabela
+    /**
+     * TableView (tabela) que exibe os resultados da analise em formato tabular.
+     */
     @FXML
     private TableView tabela;
 
+    /**
+     * Coluna da tabela que exibe o nome das classes analisadas.
+     * Cada uma das suas colunas e' associada a uma metrica.
+     * Cada linha da tabela corresponde a uma classe analisada.
+     */
     @FXML
     private TableColumn<ClassInfo, String> colNome;
 
+    /**
+     * Coluna da tabela que exibe as Linhas de Codigo (LOC) de cada classe.
+     */
     @FXML
     private TableColumn<ClassInfo, Integer> colLOC;
 
+    /**
+     * Coluna da tabela que exibe o Numero de Metodos (NOM) de cada classe.
+     */
     @FXML
     private TableColumn<ClassInfo, Integer> colNOM;
 
+    /**
+     * Coluna da tabela que exibe o Numero de Atributos (NOA) de cada classe.
+     */
     @FXML
     private TableColumn<ClassInfo, Integer> colNOA;
 
+    /**
+     * Coluna da tabela que exibe a Profundidade da Arvore de Heranca (DIT) de cada classe.
+     */
     @FXML
     private TableColumn<ClassInfo, Integer> colDIT;
 
+    /**
+     * Coluna da tabela que exibe o Numero de Filhos (NOC) de cada classe.
+     */
     @FXML
     private TableColumn<ClassInfo, Integer> colNOC;
 
+    /**
+     * Coluna da tabela que exibe o Acoplamento entre Objetos (CBO) de cada classe.
+     */
     @FXML
     private TableColumn<ClassInfo, Integer> colCBO;
 
+    /**
+     * Coluna da tabela que exibe a Complexidade Ciclomatica (CC) de cada classe.
+     */
     @FXML
     private TableColumn<ClassInfo, Integer> colCC; // CiclomaticComplexity
 
+    /**
+     * Coluna da tabela que exibe o Numero Medio de Parametros dos Metodos (NPRM) de cada classe.
+     */
     @FXML
     private TableColumn<ClassInfo, Double> colNPRM;
 
+    /**
+     * Coluna da tabela que exibe a Media do Numero de Linhas por Metodo (AvgLOCMethod) de cada classe.
+     */
     @FXML
     private TableColumn<ClassInfo, Double> colAvgLOC;
 
 
     //Grafico
+    /**
+     * BarChart que exibe os resultados da analise em formato grafico.
+     * Os seus dados sao preenchidos dinamicamente conforme o botao selecionado.
+     */
     @FXML
     private BarChart<String, Number> grafico;
 
 
+    /**
+     * O diretorio selecionado pelo utilizador para analise.
+     */
     private File selectedDir;
+
+    /**
+     * O objeto ProjectAnalyser que realiza a analise do projeto selecionado.
+     */
     private ProjectAnalyser analyser;
 
+    /**
+     * Indica se o grafico e' o primeiro a ser exibido (para controlar a animacao).
+     */
     private boolean primeiroGrafico = true;
 
 
-    // corre quando a interface aparece
+    /**
+     * Metodo de inicializacao chamado automaticamente apos o carregamento do FXML.
+     * Configura o estado inicial dos elementos visuais da interface.
+     * Atribui a imagem do logotipo, esconde elementos da tabela e grafico,
+     * e configura as colunas da tabela para exibirem os dados corretamente.
+     *
+     * Mostra apenas o ecra inicial com os botoes de escolha de pasta e analise.
+     */
+    @FXML
     public void initialize() {
         logotipo.setImage(new Image("/Logotipo.png"));
         labelPE.setOpacity(0);
@@ -172,7 +290,10 @@ public class Controller {
 
     }
 
-    //configura as colunas para irem buscar valores automaticamente
+    /**
+     * Configura as colunas da tabela para exibirem os dados corretos
+     * associando cada coluna a uma propriedade da classe ClassInfo.
+     */
     private void configurarTabela(){
         colNome.setCellValueFactory(new PropertyValueFactory<>("name"));
         colLOC.setCellValueFactory(new PropertyValueFactory<>("loc"));
@@ -186,6 +307,12 @@ public class Controller {
         colAvgLOC.setCellValueFactory(new PropertyValueFactory<>("avgLocMethod"));
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de escolher pasta.
+     * Abre um dialogo para selecionar um diretorio e atualiza a interface
+     * com o nome da pasta escolhida.
+     * Com base no diretorio selecionado, atualiza a label correspondente e e' atualizado o selectedDir.
+     */
     @FXML
     private void onSelecionarPasta() {
         DirectoryChooser chooser = new DirectoryChooser();
@@ -206,6 +333,17 @@ public class Controller {
         }
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de analisar o projeto.
+     *
+     * Inicia a analise do projeto selecionado atualizando o objeto ProjectAnalyser
+     * e atualiza a interface para exibir os resultados (tabela e graficos).
+     *
+     * Se nenhum diretorio foi selecionado, ou a pasta nao for do tipo esperado, mostra um alerta de erro.
+     *
+     * Ao iniciar a analise, o ecra inicial e' desativado bem como os seus elementos visuais,
+     * e o ecra de resultados e' ativado, mostrando a tabela de resultados.
+     */
     @FXML
     private void onAnalisar(){
 
@@ -284,6 +422,11 @@ public class Controller {
     }
 
 
+    /**
+     * Preenche a tabela de resultados com os dados obtidos pela analise do projeto.
+     * Cada linha da tabela corresponde a uma classe analisada,
+     * e cada coluna exibe uma metrica diferente.
+     */
     public void preencheTabela(){
         //limpa dados antigos da tabela
         tabela.getItems().clear();
@@ -297,6 +440,11 @@ public class Controller {
 
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de voltar ao ecra inicial.
+     * Restaura a interface para o estado inicial, escondendo a tabela e graficos,
+     * e exibindo os botoes de escolha de pasta e analise.
+     */
     @FXML
     public void onVoltar(){
         //desaparece a tabela, grid e botao voltar
@@ -335,6 +483,10 @@ public class Controller {
         stage.setHeight(405);
     }
 
+    /**
+     * Limpa a selecao visual dos botoes de metrica, removendo a classe CSS
+     * que indica o botao atualmente selecionado.
+     */
     private void limparSelecaoBotoes() {
         botaoTabela.getStyleClass().remove("button-selecionado");
         botaoLOC.getStyleClass().remove("button-selecionado");
@@ -348,6 +500,11 @@ public class Controller {
         botaoAvgLOCMethod.getStyleClass().remove("button-selecionado");
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de mostrar a tabela de resultados.
+     * Atualiza a interface para exibir a tabela e esconder o grafico.
+     * Tambem atualiza a selecao visual dos botoes.
+     */
     public void onBotaoTabela(){
         changeSelectedButtonColor(botaoTabela);
         //ativa a tabela e desativa o grafico se ainda nao estiverem
@@ -361,6 +518,11 @@ public class Controller {
         }
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de mostrar o grafico de Linhas de Codigo por Classe (LOC).
+     * Atualiza a interface para exibir o grafico correspondente.
+     * Tambem atualiza a selecao visual dos botoes.
+     */
     public void onLOC(){
         changeSelectedButtonColor(botaoLOC);
 
@@ -374,6 +536,11 @@ public class Controller {
 
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de mostrar o grafico de Numero de Metodos por Classe (NOM).
+     * Atualiza a interface para exibir o grafico correspondente.
+     * Tambem atualiza a selecao visual dos botoes.
+     */
     public void onNOM(){
         changeSelectedButtonColor(botaoNOM);
 
@@ -387,6 +554,11 @@ public class Controller {
 
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de mostrar o grafico de Numero de Atributos por Classe (NOA).
+     * Atualiza a interface para exibir o grafico correspondente.
+     * Tambem atualiza a selecao visual dos botoes.
+     */
     public void onNOA(){
         changeSelectedButtonColor(botaoNOA);
         List<Integer>noas=new ArrayList();
@@ -398,6 +570,11 @@ public class Controller {
         preencherGrafico("Numero de Atributos por Classe", noas);
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de mostrar o grafico de Profundidade da Arvore de Heranca por Classe (DIT).
+     * Atualiza a interface para exibir o grafico correspondente.
+     * Tambem atualiza a selecao visual dos botoes.
+     */
     public void onDIT(){
         changeSelectedButtonColor(botaoDIT);
 
@@ -410,6 +587,11 @@ public class Controller {
         preencherGrafico("Profundidade da Arvore de Heranca por Classe", dits);
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de mostrar o grafico de Numero de Filhos de cada Classe (NOC).
+     * Atualiza a interface para exibir o grafico correspondente.
+     * Tambem atualiza a selecao visual dos botoes.
+     */
     public void onNOC(){
         changeSelectedButtonColor(botaoNOC);
         List<Integer>nocs=new ArrayList();
@@ -421,6 +603,11 @@ public class Controller {
         preencherGrafico("Numero de Filhos de cada Classe", nocs);
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de mostrar o grafico de Acoplamento entre Objetos por Classe (CBO).
+     * Atualiza a interface para exibir o grafico correspondente.
+     * Tambem atualiza a selecao visual dos botoes.
+     */
     public void onCBO(){
         changeSelectedButtonColor(botaoCBO);
 
@@ -433,6 +620,11 @@ public class Controller {
         preencherGrafico("Acoplamento entre Objetos por Classe", cbos);
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de mostrar o grafico de Complexidade Ciclomatica por Classe (CC).
+     * Atualiza a interface para exibir o grafico correspondente.
+     * Tambem atualiza a selecao visual dos botoes.
+     */
     public void onCC(){
         changeSelectedButtonColor(botaoCC);
 
@@ -445,6 +637,11 @@ public class Controller {
         preencherGrafico("Complexidade Ciclomatica por Classe", ccs);
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de mostrar o grafico de Numero Medio de Parametros dos Metodos de Cada Classe (NPRM).
+     * Atualiza a interface para exibir o grafico correspondente.
+     * Tambem atualiza a selecao visual dos botoes.
+     */
     public void onNPRM(){
         changeSelectedButtonColor(botaoNPRM);
         List<Integer>nprms=new ArrayList();
@@ -456,6 +653,11 @@ public class Controller {
         preencherGrafico("Numero Medio de Parametros dos Metodos de Cada Classe", nprms);
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de mostrar o grafico de Media do Numero de Linhas por Classe (AvgLOCMethod).
+     * Atualiza a interface para exibir o grafico correspondente.
+     * Tambem atualiza a selecao visual dos botoes.
+     */
     public void onAvgLOC(){
         changeSelectedButtonColor(botaoAvgLOCMethod);
 
@@ -468,6 +670,12 @@ public class Controller {
         preencherGrafico("Media do Numero de Linhas por Classe", avgLocs);
     }
 
+    /**
+     * Metodo chamado quando o utilizador clica no botao de exportar os resultados para um ficheiro CSV.
+     * Abre um dialogo para selecionar o diretorio onde o ficheiro sera guardado
+     * e chama o metodo de exportacao do ProjectAnalyser.
+     * Mostra uma mensagem de sucesso ou erro conforme o resultado da operacao.
+     */
     public void onExportar(){
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Selecione onde deseja guardar o ficheiro: ");
@@ -494,13 +702,21 @@ public class Controller {
     }
 
 
-
+    /**
+     * Altera a cor do botao selecionado, indicando visualmente qual metrica esta ativa.
+     * Remove a selecao dos outros botoes.
+     * @param botao O botao que foi selecionado.
+     */
     private void changeSelectedButtonColor(Button botao){
         limparSelecaoBotoes();
         botao.getStyleClass().add("button-selecionado");
     }
 
-    //ativa o grafico e desativa a tabela se ainda nao estiverem
+    /**
+     * Ativa o grafico, tornando-o visivel e desativando a tabela.
+     * Utilizado quando o utilizador seleciona um botao de metrica para exibir o grafico correspondente.
+     * Caso o grafico ja esteja ativo, nao faz nada.
+     */
     private void activateGraph(){
         if(grafico.isDisable()) {
             grafico.setOpacity(1);
@@ -512,6 +728,13 @@ public class Controller {
         }
     }
 
+    /**
+     * Preenche o grafico com os dados fornecidos.
+     * Cria uma nova serie de dados com o nome especificado e adiciona os pontos correspondentes
+     * a cada classe e seu valor de metrica.
+     * @param nomeGrafico O nome da metrica a ser exibida no grafico.
+     * @param results A lista de valores da metrica para cada classe.
+     */
     private void preencherGrafico(String nomeGrafico, List results){
 
         grafico.setAnimated(!primeiroGrafico);
@@ -532,6 +755,11 @@ public class Controller {
             primeiroGrafico=false;
     }
 
+    /**
+     * Mostra um alerta de erro com o titulo e mensagem fornecidos.
+     * @param titulo O titulo do alerta.
+     * @param msg A mensagem do alerta.
+     */
     private void mostrarAlerta(String titulo, String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Erro");
@@ -541,11 +769,4 @@ public class Controller {
         alert.getDialogPane().setMinWidth(500);
         alert.showAndWait();
     }
-
-
-
-
-
-
-
 }
