@@ -464,11 +464,6 @@ public class MetricCalculator {
         if (type.getSuperclassType() != null)
             types = addType(type.getSuperclassType(), types);
 
-        //interfaces
-        for (Object o : type.superInterfaceTypes()) {
-            types = addType((Type)o, types);
-        }
-
         // Campos (tipo + inicializadores)
         for (FieldDeclaration fd : type.getFields()) {
             types = addType(fd.getType(), types);

@@ -270,27 +270,27 @@ public class MetricCalculatorTest {
 
         // Class A
         LOC = A.getLoc();
-        esperado = 49 - 37 + 1; // linha inicial = 37; linha final = 49
+        esperado = 76 - 63 + 1; // linha inicial = 63; linha final = 76
 
-        assertEquals(esperado, LOC, "A tem 13 linhas de codigo e nao " + LOC);
+        assertEquals(esperado, LOC, "A tem " + esperado + " linhas de codigo e nao " + LOC);
 
         // Class B
         LOC = B.getLoc();
-        esperado = 58 - 54 + 1; // linha inicial = 54; linha final = 58
+        esperado = 85 - 80 + 1; // linha inicial = 80; linha final = 85
 
-        assertEquals(esperado, LOC, "B tem 5 linhas de codigo e nao " + LOC);
+        assertEquals(esperado, LOC, "B tem " + esperado + " linhas de codigo e nao " + LOC);
 
         // Class C
         LOC = C.getLoc();
-        esperado = 83 - 63 + 1; // linha inicial = 63; linha final = 83
+        esperado = 110 - 89 + 1; // linha inicial = 89; linha final = 110
 
-        assertEquals(esperado, LOC, "C tem 20 linhas de codigo e nao " + LOC);
+        assertEquals(esperado, LOC, "C tem " + esperado + " linhas de codigo e nao " + LOC);
 
         // Class D
         LOC = D.getLoc();
-        esperado = 82 - 64 + 1; // linha inicial = 82; linha final = 64
+        esperado = 109 - 90 + 1; // linha inicial = 90; linha final = 109
 
-        assertEquals(esperado, LOC, "D tem 20 linhas de codigo e nao " + LOC);
+        assertEquals(esperado, LOC, "D tem " + esperado + " linhas de codigo e nao " + LOC);
     }
 
     /**
@@ -366,14 +366,14 @@ public class MetricCalculatorTest {
 
         // Class A
         Avg = A.getAvgLocMethod();
-        linhas = 49 - 37 + 1; // LOC
+        linhas = 76 - 63 + 1; // LOC
         esperado = linhas/1; // 1 metodo
 
         assertEquals(esperado, Avg, "A media de linhas de codigo por metodo de A e " + esperado + " e nao " + Avg);
 
         // Class B
         Avg = B.getAvgLocMethod();
-        linhas = 58 - 54 + 1; // LOC
+        linhas = 85 - 80 + 1; // LOC
         esperado = linhas/1; // 1 metodo
 
         assertEquals(esperado, Avg, "A media de linhas de codigo por metodo de B e " + esperado + " e nao " + Avg);
@@ -386,7 +386,7 @@ public class MetricCalculatorTest {
 
         // Class D
         Avg = D.getAvgLocMethod();
-        linhas = 82 - 64 + 1; // LOC
+        linhas = 109 - 90 + 1; // LOC
         esperado = linhas/2; // 2 metodos
 
         assertEquals(esperado, Avg, "A media de linhas de codigo por metodo de D e " + esperado + " e nao " + Avg);
