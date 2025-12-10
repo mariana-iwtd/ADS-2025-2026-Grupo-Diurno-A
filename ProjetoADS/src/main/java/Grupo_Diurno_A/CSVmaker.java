@@ -99,33 +99,4 @@ public class CSVmaker {
 
     }
 
-    //todo tirar o main quando ja nao for preciso
-    public static void main(String[] args){
-        //Caminho para o diretorio com codigo fonte a analisar
-        //Ema
-        //Path projectPath = Paths.get("C:/Users/emasi/OneDrive/Ambiente de Trabalho/licenciatura/2ano/workspace/Sokoban_EmaReis110847_MarianaCapela104715");
-        //Mariana - 1º Grande 2º Mais Pequeno
-        //Path projectPath = Paths.get("C:/Users/maria/Documents/Universidade/2Ano/1º Semestre/Programação Orientada por Objetos/Projeto/Sokoban_EmaReis110847_MarianaCapela104715");
-        //Path projectPath = Paths.get("C:/Users/maria/Documents/Universidade/2Ano/1º Semestre/Programação Orientada por Objetos/Workspace/Exercicio_S2");
-        //Nadia
-        Path projectPath = Paths.get("/Users/nadiagavancha/Documents/6 semestre/ES/projeto/ProjetoES/ES-2024-25-2Sem-Quarta-LEI-A/Projeto_ES");
-
-        FileScanner scanner = new FileScanner(projectPath);
-        List<CompilationUnit> asts = scanner.getCompilationUnits();
-
-        MetricCalculator m = new MetricCalculator(asts);
-        List<ClassInfo> c= m.getClasses();
-
-        try {
-            CSVmaker csv = new CSVmaker("/Users/nadiagavancha/Documents/mestrado/ADS/teste", c);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-        System.out.println(c.get(5).getMethods().get(0).getName());
-        //System.out.println(c.get(0).getMethods().get(4).getName());//da erro pk a classe alvo n tem 5 metodos o que significa que a lista está correta :)
-        System.out.println(c.get(8).getNoc()); //tem de dar 9 -no meu deu 10 pk tinha uma classe a mais no projeto e estive uns 20 minutos a tentar perceber o erro
-        System.out.println(c.get(1).getDit());
-
-    }
 }

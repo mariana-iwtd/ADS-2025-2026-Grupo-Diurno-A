@@ -162,41 +162,4 @@ public class FileScanner {
 
     }
 
-    //todo: nao esquecer de apagar ou comentar este main de teste
-    public static void main (String[] args) {
-       //main para testar a classe FileScanner
-        //Caminho para o diretorio com codigo fonte a analisar
-        Path projectPath = Paths.get("C:/Users/emasi/OneDrive/Ambiente de Trabalho/licenciatura/2ano/workspace/Sokoban_EmaReis110847_MarianaCapela104715");
-
-        // Criar instncia do FileScanner
-        FileScanner scanner = new FileScanner(projectPath);
-
-        //Lista ficheiros encontrados
-        System.out.println("Ficheiros encontrados:");
-        for (File f : scanner.getFiles()) {
-            System.out.println("- " + f.getName());
-        }
-
-        //Criar ASTs e mostrar informacao basica
-        System.out.println("\nASTs criadas:");
-        List<CompilationUnit> asts = scanner.parseFilesAST(scanner.getFiles(), projectPath.toString());
-        for (CompilationUnit cu : asts) {
-            cu.accept(new ASTVisitor() {
-                @Override
-                //visita as declaracoes de classes e imprime o nome
-                public boolean visit(TypeDeclaration node) {
-                    System.out.println("\n- Classe: " + node.getName());
-                    return true; // visitar o interior (metodos, atributos)
-                }
-
-                @Override
-                public boolean visit(MethodDeclaration node) {
-                    System.out.println("   Metodo: " + node.getName());
-                    return false;
-                }
-            });
-        }
-
-    }
-
 }
