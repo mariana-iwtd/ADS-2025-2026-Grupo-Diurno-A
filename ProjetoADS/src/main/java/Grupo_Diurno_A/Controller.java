@@ -581,7 +581,7 @@ public class Controller {
         List<Integer>dits=new ArrayList();
 
         for(ClassInfo classe:analyser.getResults())
-            dits.add(classe.getNom());
+            dits.add(classe.getDit());
 
         activateGraph();
         preencherGrafico("Profundidade da Arvore de Heranca por Classe", dits);
@@ -614,7 +614,7 @@ public class Controller {
         List<Integer>cbos=new ArrayList();
 
         for(ClassInfo classe:analyser.getResults())
-            cbos.add(classe.getNom());
+            cbos.add(classe.getCBO());
 
         activateGraph();
         preencherGrafico("Acoplamento entre Objetos por Classe", cbos);
@@ -631,7 +631,7 @@ public class Controller {
         List<Integer>ccs=new ArrayList();
 
         for(ClassInfo classe:analyser.getResults())
-            ccs.add(classe.getNom());
+            ccs.add(classe.getCiclomaticComplexity());
 
         activateGraph();
         preencherGrafico("Complexidade Ciclomatica por Classe", ccs);
@@ -644,10 +644,10 @@ public class Controller {
      */
     public void onNPRM(){
         changeSelectedButtonColor(botaoNPRM);
-        List<Integer>nprms=new ArrayList();
+        List<Double>nprms=new ArrayList();
 
         for(ClassInfo classe:analyser.getResults())
-            nprms.add(classe.getNom());
+            nprms.add(classe.getNPRM());
 
         activateGraph();
         preencherGrafico("Numero Medio de Parametros dos Metodos de Cada Classe", nprms);
@@ -661,10 +661,10 @@ public class Controller {
     public void onAvgLOC(){
         changeSelectedButtonColor(botaoAvgLOCMethod);
 
-        List<Integer>avgLocs=new ArrayList();
+        List<Double>avgLocs=new ArrayList();
 
         for(ClassInfo classe:analyser.getResults())
-            avgLocs.add(classe.getNom());
+            avgLocs.add(classe.getAvgLocMethod());
 
         activateGraph();
         preencherGrafico("Media do Numero de Linhas por Classe", avgLocs);
