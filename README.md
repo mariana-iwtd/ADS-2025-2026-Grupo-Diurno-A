@@ -11,12 +11,9 @@ O ficheiro **_Relatorio_Projeto.pdf_** contém o relatório final do projeto.
 
 Na pasta **_JavaDoc_** estão todos os documentos JavaDoc.
 
-<BR>
-<div align="center" style="width:300px;height:120px;overflow:hidden;margin:0 auto;">
-  <img src="ProjetoADS/src/main/resources/Logotipo.png"
-       style="width:300px;height:120px;object-fit:cover;object-position:center;"
-       alt="Logotipo">
-</div>
+<p align="center">
+  <img src="ProjetoADS/src/main/resources/Logotipo.png" width="300" style="padding:0px;" alt="Logotipo">
+</p>
 
 ## Ferramenta de Análise de Métricas de Código (Java)
 

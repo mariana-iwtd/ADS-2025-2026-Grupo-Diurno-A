@@ -5,54 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="685e9524-741d-4349-8820-a57d4cca3bcd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Diagramas/Diagrama_BPMN.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Diagramas/Diagrama_Implementação.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Diagramas/Diagrama_UseCase.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Diagramas/Diagrama_de_Classes.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Diagramas/Diagrama_de_Classes_Conceptual.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Diagramas/Esquema_Arquitetura.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Diagramas/UtilityTree.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/ProductBacklog/ProductBacklog.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/ProductBacklog/Requisito_ProductBacklog.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint1/BurndownChart_Sprint1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint1/DailyScrum_Sprint1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint1/Planeamento_Sprint1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint1/Sprint1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint1/SprintRetrospective_Sprint1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint1/SprintReview_Sprint1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint1/Tarefa_Sprint1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint2/BurndownChart_Sprint2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint2/DailyScrum_Sprint2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint2/Planeamento_Sprint2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint2/Sprint2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint2/SprintRetrospective_Sprint2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint2/SprintReview_Sprint2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint2/Tarefa_Sprint2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint3/BurndownChart_Sprint3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint3/DailyScrum_Sprint3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint3/Planeamento_Sprint3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint3/Sprint3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint3/SprintRetrospective_Sprint3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint3/SprintReview_Sprint3_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint3/SprintReview_Sprint3_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint3/SprintReview_Sprint3_3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint3/SprintReview_Sprint3_4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint3/Tarefa_Sprint3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint4/BurndownChart_Sprint4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint4/DailyScrum_Sprint4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint4/Planeamento_Sprint4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint4/Sprint4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint4/SprintRetrospective_Sprint4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint4/SprintReview_Sprint4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint4/Tarefa_Sprint4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint5/BurndownChart_Sprint5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint5/DailyScrum_Sprint5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint5/Planeamento_Sprint5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint5/Sprint5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint5/SprintRetrospective_Sprint5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint5/SprintReview_Sprint5.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Screenshots_Trello/Sprint5/Tarefa_Sprint5.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjetoADS/src/main/java/Grupo_Diurno_A/MetricCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/ProjetoADS/src/main/java/Grupo_Diurno_A/MetricCalculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
