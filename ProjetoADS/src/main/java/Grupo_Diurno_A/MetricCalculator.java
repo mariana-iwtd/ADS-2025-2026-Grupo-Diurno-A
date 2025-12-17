@@ -116,22 +116,6 @@ public class MetricCalculator {
             methods.add(methodInfo);
         }
 
-        // Se fizermos assim, vai buscar as metodos de classes internas tambem, o que nao e' suposto
-        /*type.accept(new ASTVisitor() {
-            @Override
-            public boolean visit(MethodDeclaration no){
-                String name = no.getName().toString();
-                int startLine = ast.getLineNumber(no.getStartPosition());
-                int endLine = ast.getLineNumber(no.getStartPosition() + no.getLength())-1;
-                int numeroDeParametros = no.parameters().size();
-                MethodInfo methodInfo = new MethodInfo(name, startLine, endLine, numeroDeParametros);
-                methodInfo.setCyclomaticComplexity(calculateCC_method(no)); //preenche a complexidade ciclomatica do metodo
-
-                methods.add(methodInfo);
-
-                return true;
-            }
-        });*/
         return methods;
     }
 
@@ -159,26 +143,6 @@ public class MetricCalculator {
             }
         }
 
-        // Se fizermos assim, conta tambem os atributos de classes internas, o que nao e' suposto
-        /*
-        type.accept(new ASTVisitor() {
-            //vai ver declaracoes de atributos
-            @Override
-            public boolean visit(FieldDeclaration no){
-                String type_data = no.getType().toString();
-                //pode haver mais do que um atributo declarado na mesma linha - no.fragments() devolve uma lista com todos os atributos declarados na linha
-                //elementos da lista sao do tipo VariableDeclarationFragment
-                //exemplo: int x, y; sao dois fragments
-                List<VariableDeclarationFragment> fragments = no.fragments();
-                for(VariableDeclarationFragment fragment : fragments){
-                    String name = fragment.getName().toString();
-                    AtributeInfo atributeInfo = new AtributeInfo(name, type_data);
-                    atributes.add(atributeInfo);
-                }
-                return true;
-            }
-        });*/
-
         return atributes;
     }
 
@@ -189,7 +153,6 @@ public class MetricCalculator {
      */
     private int calculateCC_method(MethodDeclaration method){
         final int[] CC = {1}; //complexidade ciclomatica inicia em 1
-        //System.out.println("A analisar metodo " + method.getName());
 
         method.accept(new ASTVisitor() {
 
@@ -197,9 +160,6 @@ public class MetricCalculator {
             // Verifica se tem ifs -> if (x > 0)
             @Override
             public boolean visit(IfStatement node) {
-                // Teste
-                //System.out.println("Tem If - +1");
-
                 CC[0]++;
                 return true;
             }
@@ -207,9 +167,6 @@ public class MetricCalculator {
             // Verifica se tem fors -> for(...)
             @Override
             public boolean visit(ForStatement node) {
-                // Teste
-                //System.out.println("Tem for - +1");
-
                 CC[0]++;
                 return true;
             }
@@ -217,9 +174,6 @@ public class MetricCalculator {
             // Verifica se tem forEachs -> for(Type x : list)
             @Override
             public boolean visit(EnhancedForStatement node) {
-                // Teste
-                //System.out.println("Tem forEach - +1");
-
                 CC[0]++;
                 return true;
             }
@@ -227,9 +181,6 @@ public class MetricCalculator {
             // Verifica se tem whiles -> while(...)
             @Override
             public boolean visit(WhileStatement node) {
-                // Teste
-                //System.out.println("Tem while - +1");
-
                 CC[0]++;
                 return true;
             }
@@ -237,9 +188,6 @@ public class MetricCalculator {
             // Verifica se tem dos -> do {...} while(...)
             @Override
             public boolean visit(DoStatement node) {
-                // Teste
-                //System.out.println("Tem do - +1");
-
                 CC[0]++;
                 return true;
             }
@@ -248,18 +196,12 @@ public class MetricCalculator {
             // se houver, retorna true para permitir avaliar o numero de cases
             @Override
             public boolean visit(SwitchStatement node) {
-                // Teste
-                //System.out.println("Tem switch entao vamos verificar o numero de cases");
-
                 return true;
             }
 
             // Verifica se existem cases -> case:
             @Override
             public boolean visit(SwitchCase node) {
-                // Teste
-                //System.out.println("Tem case - +1");
-
                 CC[0]++;
                 return true;
             }
@@ -267,9 +209,6 @@ public class MetricCalculator {
             // Verifica se tem caths -> catch(Exception e)
             @Override
             public boolean visit(CatchClause node) {
-                // Teste
-                //System.out.println("Tem catch - +1");
-
                 CC[0]++;
                 return true;
             }
@@ -277,15 +216,11 @@ public class MetricCalculator {
             // Verifica se tem condicoes -> condition ? x : y
             @Override
             public boolean visit(ConditionalExpression node) {
-                // Teste
-                //System.out.println("Tem condicional - +1");
-
                 CC[0]++;
                 return true;
             }
         });
 
-        //System.out.println("O metodo " + method.getName() + " tem MCC = " + CC[0]);
         return CC[0];
     }
 
@@ -334,19 +269,6 @@ public class MetricCalculator {
         // variavel que guarda o numero herancas da classe
         int DIT = 0;
 
-        // Vamos percorrer a AST para encontrar o binding da classe
-        /*type.accept(new ASTVisitor() {
-            @Override
-            public boolean visit(TypeDeclaration node) {
-                // Esta metrica e' para classes, interfaces seguem outras metricas
-                if (!node.isInterface()) {
-                    binding[0] = node.resolveBinding();
-                }
-                return true;
-
-            }
-        });*/
-
         if (!type.isInterface()) {
             binding[0] = type.resolveBinding();
         }
@@ -356,19 +278,15 @@ public class MetricCalculator {
         if(binding[0] == null){
             return DIT;
         }
-        //while (!binding[0].getName().equals("Object")) {
+
         while(binding[0].getSuperclass() != null){
             // guarda o nome da classe anterior para testes
             String temp = binding[0].getName();
             // vai buscar a classe de que herda
             binding[0] = binding[0].getSuperclass();
-            // Para testar
-            //System.out.println("Classe " + temp + " herda da classe " + binding[0].getName());
 
             // aumenta o contador
             DIT++;
-            // Para teste
-            //System.out.println("Numero de herancas atuais: " + DIT);
         }
 
         return DIT;
@@ -383,19 +301,17 @@ public class MetricCalculator {
      * @return A complexidade ciclomatica total da classe.
      */
     public int calculateMCC(ClassInfo classInfo){
-        //System.out.println(" A analisar MCC da class " + classInfo.getName());
         List <MethodInfo> metodos = classInfo.getMethods();
         int complexidadeCiclomaticaTotal = 0;
         for(MethodInfo metodo : metodos){
             complexidadeCiclomaticaTotal += metodo.getCyclomaticComplexity();
         }
-        //System.out.println("A classe " + classInfo.getName() + " tem MCC = " + complexidadeCiclomaticaTotal);
+
         return complexidadeCiclomaticaTotal;
     }
 
 
 
-    //todo: apagar todos os comentarios desnecessarios antes de entregar!!
     //--------------- NOC: Number of Children --------------------------
 
     /**
@@ -407,13 +323,6 @@ public class MetricCalculator {
      * @return              {@code true} se o no' representar uma subclasse de {@code parentName}, caso contrario {@code false}
      */
     private static boolean isSon(String parentName, TypeDeclaration no){
-        //Versao para conseguir ver os nomes dos filhos todo tirar tudo quando
-//        if (no.getSuperclassType() != null)
-//            if(!no.isInterface() && no.getSuperclassType().toString().equals(parentName)) {
-//                System.out.println("Filho encontrado! - " + no.getName());
-//                return true;}
-//            else return false;
-//        else return false;
         if (no.getSuperclassType() != null)
             return !no.isInterface() && no.getSuperclassType().toString().equals(parentName);
         else return false;
@@ -485,7 +394,7 @@ public class MetricCalculator {
 
         // nao contar a propria classe
         types.remove(type.getName().getIdentifier());
-        //System.out.println("Tipos da classe: " + types);
+
         return types.size();
 
     }
@@ -499,7 +408,6 @@ public class MetricCalculator {
      */
     private static List<String> addType(Type type, List<String> types) {
         if (type == null) return types;
-
 
         // para extrair o tipo do array
         if (type.isArrayType()) return addType(((ArrayType) type).getElementType(), types);
